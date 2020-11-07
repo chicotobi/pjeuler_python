@@ -1,4 +1,5 @@
-from tools import *
+import numpy as np
+from .tools import fib
 
 def pjeuler1():
   val = 0
