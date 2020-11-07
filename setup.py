@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pjeuler-chicotobi",
-    version="0.0.2",
+    version="0.0.3",
     author="Chicotobi",
     author_email="tobias310788@googlemail.com",
     description="Tools in Python for Project Euler",
