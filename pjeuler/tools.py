@@ -118,6 +118,15 @@ def write_as_prime_sum(l,n,maxp):
       vals += write_as_prime_sum(l+[p], n-p,p)
   return vals
 
+def digits_int(x):
+  l = []
+  while x>9:
+    l.append(x%10)
+    x = x//10
+  l.append(x)
+  l.reverse()
+  return l
+
 def int2base(x, base):
     import string
     digs = string.digits + string.ascii_letters

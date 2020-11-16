@@ -1,4 +1,4 @@
-import os
+import math
 import numpy as np
 
 def pjeuler(i):
@@ -48,7 +48,9 @@ def pjeuler7():
   
 def pjeuler8():
   from .tools import digits
-  a = '7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450'
+  f = get(8)
+  a = f.read()
+  f.close()
   return max([np.prod(digits(a[i:i+13])) for i in range(len(a)-13)])
 
 def pjeuler9():  
@@ -134,6 +136,61 @@ def pjeuler17():
       s = num2word(i).replace('-','').replace(' ','')
       sum += len(s)
   return sum
+
+def pjeuler18():
+  from functools import lru_cache
+  n = 15
+  a = np.zeros((n,n),dtype="uint32")
+  f = get(18)
+  for (i,line) in enumerate(f):
+    for (j,val) in enumerate(str.split(line,sep=" ")):
+      a[i,j] = int(val)
+  f.close()
+  @lru_cache(None)
+  def f(i,j):
+    if i==n-1:
+      return a[i,j]
+    else:
+      return a[i,j] + max(f(i+1,j),f(i+1,j+1))
+  return f(0,0)
+
+def pjeuler19():
+  c = 0
+  v = 0
+  for y in range(1900,2001):
+    m = [31,28,31,30,31,30,31,31,30,31,30,31]
+    if y%4==0:
+      m[1] += 1
+      if y%100==0:
+        m[1] -= 1
+        if y%400==0:
+          m[1] += 1
+    for mo in m:
+      v = (v+mo)%7
+      if v==6 and y>1900:
+        c +=1
+  return c
+
+def pjeuler20():
+  from .tools import digits_int
+  return sum(digits_int(math.factorial(100)))
+
+def pjeuler67():
+  from functools import lru_cache
+  n = 100
+  a = np.zeros((n,n),dtype="uint32")
+  f = get(67)
+  for (i,line) in enumerate(f):
+    for (j,val) in enumerate(str.split(line,sep=" ")):
+      a[i,j] = int(val)
+  f.close()
+  @lru_cache(None)
+  def f(i,j):
+    if i==n-1:
+      return a[i,j]
+    else:
+      return a[i,j] + max(f(i+1,j),f(i+1,j+1))
+  return f(0,0)
 
 def pjeuler77():
   from .tools import write_as_prime_sum
