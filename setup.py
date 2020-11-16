@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pjeuler-chicotobi",
-    version="0.0.3",
+    version="0.8.0",
     author="Chicotobi",
     author_email="tobias310788@googlemail.com",
     description="Tools in Python for Project Euler",
@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/chicotobi/pjeuler_python",
     packages=setuptools.find_packages(),
+    include_package_data=True,
     classifiers=[
         "Development Status :: 1 - Planning",
         "Programming Language :: Python :: 3",
