@@ -189,6 +189,17 @@ def pjeuler21():
       s += i+j
   return int(s)
 
+def pjeuler22():
+  from .tools import lettervalue
+  s = get(22)
+  t = [i for i in s][0].replace('"','').split(",")
+  s.close()
+  t.sort()
+  s = 0
+  for (i,j) in enumerate(t):
+    s += (i+1) * lettervalue(j)
+  return s
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")

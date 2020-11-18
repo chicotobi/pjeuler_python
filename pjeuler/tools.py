@@ -39,6 +39,10 @@ def n_divs(m):
   f = factors(m)
   return np.prod(np.fromiter(collections.Counter(f).values(),dtype="int")+1)
 
+def lettervalue(word):
+  import string
+  return sum(string.ascii_uppercase.index(c)+1 for c in word)
+
 def is_palindrome(n):
     return str(n)==str(n)[::-1]
 
