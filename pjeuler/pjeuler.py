@@ -1,4 +1,6 @@
 import math
+import functools
+import collections
 import numpy as np
 
 def pjeuler(i):
@@ -138,7 +140,6 @@ def pjeuler17():
   return sum
 
 def pjeuler18():
-  from functools import lru_cache
   n = 15
   a = np.zeros((n,n),dtype="uint32")
   f = get(18)
@@ -146,7 +147,7 @@ def pjeuler18():
     for (j,val) in enumerate(str.split(line,sep=" ")):
       a[i,j] = int(val)
   f.close()
-  @lru_cache(None)
+  @functools.lru_cache(None)
   def f(i,j):
     if i==n-1:
       return a[i,j]
@@ -175,8 +176,20 @@ def pjeuler20():
   from .tools import digits_int
   return sum(digits_int(math.factorial(100)))
 
+def pjeuler21():
+  from .tools import factors
+  @functools.lru_cache(None)
+  def f(x):
+    y=collections.Counter(factors(x))
+    return np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x
+  s = 0
+  for i in range(2,10000):
+    j = f(i)
+    if i<j and f(j)==i:
+      s += i+j
+  return int(s)
+
 def pjeuler67():
-  from functools import lru_cache
   n = 100
   a = np.zeros((n,n),dtype="uint32")
   f = get(67)
@@ -184,7 +197,7 @@ def pjeuler67():
     for (j,val) in enumerate(str.split(line,sep=" ")):
       a[i,j] = int(val)
   f.close()
-  @lru_cache(None)
+  @functools.lru_cache(None)
   def f(i,j):
     if i==n-1:
       return a[i,j]
