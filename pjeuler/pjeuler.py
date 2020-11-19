@@ -271,6 +271,20 @@ def pjeuler30():
       s += i
   return s
 
+def pjeuler31():
+  l = [1,2,5,10,20,50,100,200]
+  @functools.lru_cache(None)
+  def split(s,min_size):
+    c = 0
+    l2 = [i for i in l if min_size<=i]
+    for i in l2:
+      if s-i>=min_size:
+        c += split(s-i,i)
+    if s in l2:
+      c += 1
+    return c
+  return split(200,0)
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
