@@ -164,3 +164,8 @@ def smart_mod(base,exp,mod):
 def smart_mod_prod(x,y,mod):
   v = [x]+factors(y)
   return functools.reduce(lambda x,y:x*y%mod,v)
+
+@functools.lru_cache(None)
+def sum_divs(x):
+  y=collections.Counter(factors(x))
+  return int(np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x)

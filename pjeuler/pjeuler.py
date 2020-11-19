@@ -1,6 +1,5 @@
 import math
 import functools
-import collections
 import numpy as np
 
 def pjeuler(i):
@@ -177,15 +176,11 @@ def pjeuler20():
   return sum(digits_int(math.factorial(100)))
 
 def pjeuler21():
-  from .tools import factors
-  @functools.lru_cache(None)
-  def f(x):
-    y=collections.Counter(factors(x))
-    return np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x
+  from .tools import sum_divs
   s = 0
   for i in range(2,10000):
-    j = f(i)
-    if i<j and f(j)==i:
+    j = sum_divs(i)
+    if i<j and sum_divs(j)==i:
       s += i+j
   return int(s)
 
@@ -200,6 +195,20 @@ def pjeuler22():
     s += (i+1) * lettervalue(j)
   return s
 
+def pjeuler23():
+  from .tools import sum_divs
+  l = []
+  n = 28124
+  l2 = [0]*n
+  for i in range(2,n):
+    if sum_divs(i)>i:
+      l = l+[i]
+      for j in l:
+        k = i + j 
+        if k<n:
+          l2[k] = 1
+  return sum([i for i,j in enumerate(l2) if j==0])
+ 
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
