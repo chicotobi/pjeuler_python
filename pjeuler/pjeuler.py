@@ -250,8 +250,26 @@ def pjeuler27():
         best = n
         prod = a*b
   return prod
-      
-      
+
+def pjeuler28():
+  n = 500
+  return int((16*n**3 + 30*n**2 + 26*n + 3)/3)
+
+def pjeuler29():
+  l = []
+  for a in range(2,101):
+    for b in range(2,101):
+      l = l + [a**b]
+  return len(set(l))
+
+def pjeuler30():
+  from .tools import digits_int
+  n = 6*9**5
+  s = 0
+  for i in range(2,n):
+    if i == sum([k**5 for k in digits_int(i)]):
+      s += i
+  return s
 
 def pjeuler67():
   n = 100
