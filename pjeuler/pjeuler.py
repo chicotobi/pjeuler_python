@@ -227,7 +227,12 @@ def pjeuler25():
   for (i,j) in enumerate(fib2()):
     if math.log10(j)>999:
       return i+1
-  
+    
+def pjeuler26():
+  from .tools import periodic_decimal, primes
+  d = {p: len(periodic_decimal(p)) for p in primes(1000)}
+  return max(d, key=d.get)
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")

@@ -178,3 +178,16 @@ def smart_mod_prod(x,y,mod):
 def sum_divs(x):
   y=collections.Counter(factors(x))
   return int(np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x)
+
+def periodic_decimal(denom):
+  l = []
+  if denom in [2,5]:
+    return l
+  nom = 1
+  while True:
+    nom *= 10
+    l = l+[nom//denom]
+    nom = nom%denom
+    if nom==1:
+      break
+  return l
