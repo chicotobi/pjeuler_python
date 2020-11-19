@@ -221,6 +221,12 @@ def pjeuler24():
     symbols.remove(symbols[idx])
     k = k%x
   return s
+
+def pjeuler25():
+  from .tools import fib2
+  for (i,j) in enumerate(fib2()):
+    if math.log10(j)>999:
+      return i+1
   
 def pjeuler67():
   n = 100

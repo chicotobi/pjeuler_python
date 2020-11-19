@@ -9,6 +9,15 @@ def fib(n):
     arr = arr+[arr[-2]+arr[-1]]
   return arr[0:n]
 
+def fib2():
+  a = 1
+  yield a
+  b = 1
+  yield 1
+  while True:
+    [a,b] = [b,a+b]
+    yield b
+
 def primes(limit):
     a = [True] * (limit+1)
     a[0] = a[1] = False
