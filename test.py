@@ -1,5 +1,6 @@
 import unittest
 import pjeuler
+import time
 
 class TestTools(unittest.TestCase):
   def test_lcm(self):
@@ -16,8 +17,8 @@ class TestTools(unittest.TestCase):
     y = pjeuler.tools.smart_mod(base,exp,mod)
     self.assertEqual(x,y)
     
-def mypr(i,sol,res):
-  print("Problem ",str(i).rjust(3), ": Expected ",str(sol).rjust(15)," Got ",str(res).rjust(15))
+def mypr(i,t,sol,res):
+  print("Problem",str(i).rjust(3), " took ",str(round(t,2)).rjust(5)," seconds. Expected ",str(sol).rjust(15)," Got ",str(res).rjust(15))
     
 class TestProblems(unittest.TestCase):
   def test(self):
@@ -28,7 +29,7 @@ class TestProblems(unittest.TestCase):
          70600674,76576500,5537376230,837799,137846528820,
          1366,21124,1074,171,648,
          31626,871198282,4179871,2783915460,4782,
-         983]#,-59231,669171001,9183,443839,
+         983,-59231]#,669171001,9183,443839,
          #73682,45228,100,40730,55,
          #872187,748317,932718654,840,210,
          #7652413,162,16695334890,5482660,1533776805,
@@ -41,7 +42,9 @@ class TestProblems(unittest.TestCase):
     
     print()
     for idx, sol in sols.items():
+      t0 = time.time()
       res = pjeuler.pjeuler(idx)
+      t = time.time() - t0
       self.assertEqual(sol,res)
-      mypr(idx,sol,res)
+      mypr(idx,t,sol,res)
     print()

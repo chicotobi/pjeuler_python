@@ -233,6 +233,26 @@ def pjeuler26():
   d = {p: len(periodic_decimal(p)) for p in primes(1000)}
   return max(d, key=d.get)
 
+def pjeuler27():
+  from .tools import primes
+  def f(a,b,n):
+    return n**2+a*n+b
+  p = list(primes(1000))
+  l = list(primes(100000))
+  best = 0
+  prod = 0
+  for a in range(-1000,1000):
+    for b in p:
+      for n in range(1,1000):
+        if f(a,b,n) not in l:
+          break
+      if n>best:
+        best = n
+        prod = a*b
+  return prod
+      
+      
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
