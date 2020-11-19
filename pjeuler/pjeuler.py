@@ -209,6 +209,19 @@ def pjeuler23():
           l2[k] = 1
   return sum([i for i,j in enumerate(l2) if j==0])
  
+def pjeuler24():
+  symbols = [0,1,2,3,4,5,6,7,8,9]
+  n = len(symbols)
+  k = 1000000-1
+  s = 0
+  for i in range(n):
+    x = math.factorial(n-i-1)
+    idx = k//x
+    s = 10*s + symbols[idx]
+    symbols.remove(symbols[idx])
+    k = k%x
+  return s
+  
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
