@@ -335,6 +335,55 @@ def pjeuler34():
       s += i
   return s
 
+def pjeuler35():
+  from .tools import primes
+  l = list(primes(1000000))
+  def get_rotation(x):
+    k = math.floor(math.log10(x))
+    for i in range(k):
+      x = x//10 + 10**k * (x%10)
+      yield x
+  n = 0
+  s = set(l)
+  for i in l:
+    if all([j in s for j in get_rotation(i)]):
+      n+=1
+  return n
+
+def pjeuler36():
+  from .tools import is_palindrome, int2base
+  return sum([i for i in range(1000000) if (is_palindrome(i) and is_palindrome(int2base(i,2)))])
+
+def pjeuler37():
+  from .tools import primes
+  l = list(primes(1000000))
+  s = set(l)
+  def left_trunc(x):
+    while x>9:
+      k = math.floor(math.log10(x))
+      x = x%(10**k)
+      yield x
+  def right_trunc(x):
+    while x>9:
+      x = x//10
+      yield x
+  n = 0
+  for i in s:
+    if i>7 and all([i in s for i in left_trunc(i)]) and all([i in s for i in right_trunc(i)]):
+      n += i
+  return n
+
+def pjeuler38():
+  from .tools import digits
+  s0 = set([1,2,3,4,5,6,7,8,9])
+  m = 0
+  for n in range(2,6):
+    for i in range(1,10**math.ceil(9/n)):
+      s = "".join(str(i*j) for j in range(1,n+1))
+      if len(s)==9 and set(digits(s))==s0:
+        m = max(m,int(s))
+  return m
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
