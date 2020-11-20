@@ -1,5 +1,6 @@
 import math
 import functools
+import collections
 import numpy as np
 
 def pjeuler(i):
@@ -383,6 +384,51 @@ def pjeuler38():
       if len(s)==9 and set(digits(s))==s0:
         m = max(m,int(s))
   return m
+
+def pjeuler39():
+  from .tools import gcd  
+  get_a = lambda k,m,n: k*(m**2-n**2)
+  get_b = lambda k,m,n: 2*k*m*n
+  get_c = lambda k,m,n: k*(m**2+n**2)
+  l = [0]*1000
+  for k in range(1,50):
+      for m in range(1,50):
+          for n in range(1,m):
+              a = get_a(k,m,n)
+              b = get_b(k,m,n)
+              c = get_c(k,m,n)
+              p = a+b+c
+              if gcd(m,n)==1 and p<1000:
+                l[p] += 1
+  return [i for (i,j) in enumerate(l) if j==max(l)][0]
+
+def pjeuler40():
+  s = ''
+  for i in range(1,185186):
+      s += str(i)
+  return np.prod([int(s[10**i-1]) for i in range(6)])
+
+def pjeuler41():
+  from .tools import digits_int, primes
+  def is_pandigital(x):
+    y = digits_int(x)
+    return max(collections.Counter(y).values())==1 and max(y)==len(y)
+  s = set(primes(10000000))
+  s2 = [i for i in s if is_pandigital(i)]
+  return max(s2)
+    
+def pjeuler42():
+  from .tools import lettervalue, triangle_numbers
+  f = get(42)
+  s = [i for i in f][0].replace('"','').split(",")
+  x = [lettervalue(i) for i in s]
+  f.close()
+  t = []
+  for i in triangle_numbers():
+    t += [i]
+    if i>192:
+      break
+  return len([i for i in x if i in t])
 
 def pjeuler67():
   n = 100
