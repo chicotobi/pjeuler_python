@@ -131,6 +131,7 @@ def write_as_prime_sum(l,n,maxp):
       vals += write_as_prime_sum(l+[p], n-p,p)
   return vals
 
+@functools.lru_cache(None)
 def digits_int(x):
   l = []
   while x>9:
@@ -139,6 +140,9 @@ def digits_int(x):
   l.append(x)
   l.reverse()
   return l
+
+def digits2int(x):
+  return functools.reduce(lambda a,b:10*a*b,x)
 
 def int2base(x, base):
     import string

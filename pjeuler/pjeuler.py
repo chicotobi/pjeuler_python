@@ -285,6 +285,56 @@ def pjeuler31():
     return c
   return split(200,0)
 
+def pjeuler32():
+  from .tools import digits_int
+  x = set(range(1,10))
+  s = []
+  for a in range(1,10000):
+    n = math.ceil(math.log10(a))
+    max_b = round(min(a,10**(8-n), 10**(9-2*n)))
+    for b in range(max_b):
+      y = digits_int(a)+digits_int(b)+digits_int(a*b)
+      if len(y)==9 and set(y)==x:
+        s += [a*b]
+  return sum(set(s))
+
+def pjeuler33():
+  from .tools import digits_int, digits2int, gcd
+  big_a = 1
+  big_b = 1
+  for a in range(10,100):
+    for b in range(a+1,100):
+      x = a/b
+      l1 = digits_int(a)
+      l2 = digits_int(b)
+      common = set([x for x in l1 if x in l2])
+      for c in common:
+        if c==0:
+          continue
+        l1 = list(digits_int(a))
+        l2 = list(digits_int(b))
+        l1.remove(c)
+        l2.remove(c)
+        new_a = digits2int(l1)
+        new_b = digits2int(l2)
+        if new_b != 0:
+          y = new_a/new_b
+          if abs(x-y)<1e-3:
+            big_a *= a
+            big_b *= b
+  return big_b // gcd(big_a,big_b)
+
+def pjeuler34():
+  from .tools import digits_int
+  @functools.lru_cache(None)
+  def f(n):
+    return math.factorial(n)
+  s = 0
+  for i in range(10,7*f(9)):
+    if i == sum([f(j) for j in digits_int(i)]):
+      s += i
+  return s
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
