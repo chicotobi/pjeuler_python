@@ -496,11 +496,50 @@ def pjeuler47():
 
 def pjeuler48():
   from .tools import smart_mod
-  n = int(1e11)
+  n = int(1e10)
   s = 0
   for i in range(1,1001):
-    print(i)
-    s += smart_mod(i,i,n) % n
+    k = 1
+    for j in range(i):
+      k = (k*i)%n
+    s = (s+k)%n
+  return s
+    
+def pjeuler49():
+  from .tools import primes, digits_int
+  d = 3330
+  s = set(primes(10000))
+  for i in range(1000,10000-2*d):
+    n1 = i
+    n2 = i+d
+    n3 = i+2*d
+    if n1!=1487 and n1 in s and n2 in s and n3 in s:
+      l1 = digits_int(n1)
+      l1.sort()
+      l2 = digits_int(n2)
+      l2.sort()
+      l3 = digits_int(n3)
+      l3.sort()
+      if l1==l2 and l1==l3:
+        break
+  return n1*int(1e8)+n2*int(1e4)+n3
+
+def pjeuler50():
+  from .tools import primes
+  m = 1000000
+  l = list(primes(m))
+  s = set(l)
+  for n in range(22,1000):
+    found = False
+    for i in range(len(l)-n):
+      if l[i]*n < m:
+        x = sum(l[i:i+n])
+        if x < m and x in s:
+          found = True
+          break
+    if found:
+      max_x = x
+  return max_x
 
 def pjeuler67():
   n = 100
