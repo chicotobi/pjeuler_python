@@ -301,7 +301,7 @@ def pjeuler32():
   return sum(set(s))
 
 def pjeuler33():
-  from .tools import digits_int, digits2int, gcd
+  from .tools import digits_int, gcd
   big_a = 1
   big_b = 1
   for a in range(10,100):
@@ -444,7 +444,63 @@ def pjeuler43():
                 if digits2int(i[1:4])%2==0:
                   s += digits2int(i)
   return s
-    
+
+def pjeuler44():
+  from .tools import pentagonal_numbers, is_pentagonal
+  l = []
+  min_distance = 1e10
+  for i in pentagonal_numbers():
+    if i>1e8:
+      break
+    l += [i]
+    for j in l:
+      if is_pentagonal(i-j) and is_pentagonal(i+j) and i-j<min_distance:
+        min_distance=i-j
+  return min_distance
+
+def pjeuler45():
+  from .tools import hexagonal_numbers, is_pentagonal, is_triangle
+  for i in hexagonal_numbers():
+    if i>40755 and is_pentagonal(i) and is_triangle(i):
+      return i
+
+def pjeuler46():
+  from .tools import primes
+  n = 10000
+  ps = set(primes(n))
+  for i in range(1,n):
+    j = 2*i+1
+    if j not in ps:
+      found = False
+      for p in ps:
+        lim = math.ceil(((n - p)/2)**.5)
+        for k in range(lim):
+          if p+2*k**2==j:
+            found = True
+            break
+        if found:
+          break
+      if not found:
+        return 2*i+1
+      
+def pjeuler47():
+  from .tools import factors
+  run = 0
+  for i in range(2,1000000):
+    if len(collections.Counter(factors(i)))==4:
+      run+=1
+    else:
+      run=0
+    if run==4:
+      return i-3
+
+def pjeuler48():
+  from .tools import smart_mod
+  n = int(1e11)
+  s = 0
+  for i in range(1,1001):
+    print(i)
+    s += smart_mod(i,i,n) % n
 
 def pjeuler67():
   n = 100

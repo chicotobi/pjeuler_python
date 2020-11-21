@@ -195,3 +195,24 @@ def periodic_decimal(denom):
     if nom==1:
       break
   return l
+
+def is_pentagonal(x):
+  n = 1/6*((24*x+1)**.5+1)
+  return abs(n-round(n))<1e-8 
+ 
+def is_triangle(x):
+  n = 1/2*((8*x+1)**.5-1)
+  return abs(n-round(n))<1e-8  
+
+def pentagonal_numbers():
+  i=0
+  while True:
+    i +=1
+    yield int(i*(3*i-1)/2)
+    
+def hexagonal_numbers():
+  i = 0
+  while True:
+    i += 1
+    yield i*(2*i-1)
+  
