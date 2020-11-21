@@ -142,7 +142,7 @@ def digits_int(x):
   return l
 
 def digits2int(x):
-  return functools.reduce(lambda a,b:10*a*b,x)
+  return functools.reduce(lambda a,b:10*a+b,x)
 
 def int2base(x, base):
     import string

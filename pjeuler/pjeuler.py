@@ -1,5 +1,6 @@
 import math
 import functools
+import itertools
 import collections
 import numpy as np
 
@@ -316,8 +317,8 @@ def pjeuler33():
         l2 = list(digits_int(b))
         l1.remove(c)
         l2.remove(c)
-        new_a = digits2int(l1)
-        new_b = digits2int(l2)
+        new_a = l1[0]
+        new_b = l2[0]
         if new_b != 0:
           y = new_a/new_b
           if abs(x-y)<1e-3:
@@ -429,6 +430,21 @@ def pjeuler42():
     if i>192:
       break
   return len([i for i in x if i in t])
+
+def pjeuler43():
+  from .tools import digits2int
+  s = 0
+  for i in itertools.permutations(range(10)):
+    if digits2int(i[7:10])%17==0:
+      if digits2int(i[6:9])%13==0:
+        if digits2int(i[5:8])%11==0:
+          if digits2int(i[4:7])%7==0:
+            if digits2int(i[3:6])%5==0:
+              if digits2int(i[2:5])%3==0:
+                if digits2int(i[1:4])%2==0:
+                  s += digits2int(i)
+  return s
+    
 
 def pjeuler67():
   n = 100
