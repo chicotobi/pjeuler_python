@@ -541,6 +541,22 @@ def pjeuler50():
       max_x = x
   return max_x
 
+def pjeuler51():
+  from .tools import primes
+  ps = list(primes(1000000))
+  s = set(ps)
+  for p in ps:
+    strp = str(p)
+    for digit in range(10):
+        if str(digit) in strp:
+            counter = 1
+            for d2 in range(digit+1,10):
+                new_p = int(strp.replace(str(digit),str(d2)))
+                if new_p in s:
+                    counter += 1
+            if counter==8:
+              return p             
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
