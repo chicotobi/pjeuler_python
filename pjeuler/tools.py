@@ -2,6 +2,8 @@ import numpy as np
 import math
 import collections
 import functools
+import string
+import sympy.ntheory.primetest
 
 def fib(n):
   arr = [1,1]
@@ -49,7 +51,6 @@ def n_divs(m):
   return np.prod(np.fromiter(collections.Counter(f).values(),dtype="int")+1)
 
 def lettervalue(word):
-  import string
   return sum(string.ascii_uppercase.index(c)+1 for c in word)
 
 def is_palindrome(n):
@@ -83,8 +84,7 @@ def collatz(n):
     return 3*n+1
   
 def nchoosek(n,k):
-  from math import factorial
-  return int(factorial(n)/(factorial(k)*factorial(n-k)))
+  return int(math.factorial(n)/(math.factorial(k)*math.factorial(n-k)))
   
 def triangle_numbers():
   i = 0
@@ -145,7 +145,6 @@ def digits2int(x):
   return functools.reduce(lambda a,b:10*a+b,x)
 
 def int2base(x, base):
-    import string
     digs = string.digits + string.ascii_letters
     if x < 0:
         sign = -1
@@ -221,3 +220,7 @@ def is_prime(val):
       if not val%i:
           return False
   return True
+
+@functools.lru_cache(None)
+def is_prime_mr(val):
+  return sympy.ntheory.primetest.mr(val,[2,3,5,7])

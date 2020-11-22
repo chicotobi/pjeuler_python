@@ -9,7 +9,12 @@ def pjeuler(i):
 
 def get(i):
   import os.path
-  return open(os.path.dirname(__file__)+'/input/'+str(i))
+  if '__file__' in globals():
+    return open(os.path.dirname(__file__)+'/input/'+str(i))
+  else:
+    from pathlib import Path
+    home = str(Path.home())
+    return open(home+'/pjeuler_python/pjeuler/input/'+str(i))
   
 def pjeuler1():
   val = 0
@@ -713,6 +718,45 @@ def pjeuler58():
     if ratio<0.1:
         break
   return 2*i+1
+
+def pjeuler59():
+  f = get(59)
+  arr = [int(a) for a in f.readlines()[0].split(',')]
+  f.close()
+  
+  k1 = np.bitwise_xor(32,collections.Counter(arr[0::3]).most_common(1)[0][0])
+  k2 = np.bitwise_xor(32,collections.Counter(arr[1::3]).most_common(1)[0][0])
+  k3 = np.bitwise_xor(32,collections.Counter(arr[2::3]).most_common(1)[0][0])
+  my_key = [k1,k2,k3]*(len(arr)//3)
+  
+  return sum([x^y for(x,y) in zip(arr,my_key)])
+
+def pjeuler60():
+  from .tools import primes, is_prime_mr
+  ps = list(primes(9000))
+  
+  di = {p: [] for p in ps}
+  for p1 in ps:
+   for p2 in ps:
+    if p1<p2:
+      if is_prime_mr(int(str(p1)+str(p2))) and is_prime_mr(int(str(p2)+str(p1))):
+        di[p1] += [p2]
+        di[p2] += [p1]
+  
+  s = 1e10
+  for (k1,v1) in di.items():
+    for k2 in v1:
+      v2 = di[k2]
+      for k3 in v2:
+        v3 = di[k3]
+        if k3 in v1:
+          for k4 in v3:
+            v4 = di[k4]
+            if k4 in v1 and k4 in v2:
+              for k5 in v4:
+                if k5 in v1 and k5 in v2 and k5 in v3:
+                  s = min(s,k1+k2+k3+k4+k5)
+  return s
 
 def pjeuler67():
   n = 100
