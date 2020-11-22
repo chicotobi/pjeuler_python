@@ -245,13 +245,13 @@ def pjeuler27():
   def f(a,b,n):
     return n**2+a*n+b
   p = list(primes(1000))
-  l = list(primes(100000))
+  s = set(primes(100000))
   best = 0
   prod = 0
   for a in range(-1000,1000):
     for b in p:
       for n in range(1,1000):
-        if f(a,b,n) not in l:
+        if f(a,b,n) not in s:
           break
       if n>best:
         best = n
@@ -451,16 +451,20 @@ def pjeuler43():
   return s
 
 def pjeuler44():
-  from .tools import pentagonal_numbers, is_pentagonal
-  l = []
   min_distance = 1e10
-  for i in pentagonal_numbers():
-    if i>1e8:
+  l = []
+  for i in range(1,5000):
+    l = l + [i*(3*i-1)//2]
+  s = set(l)
+  for i in range(len(l)):
+    if 2*l[i]>l[-1]:
       break
-    l += [i]
-    for j in l:
-      if is_pentagonal(i-j) and is_pentagonal(i+j) and i-j<min_distance:
-        min_distance=i-j
+    for j in range(i):
+      li=l[i]
+      lj=l[j]
+      if li-lj<min_distance and li-lj in s and li+lj in s:
+        min_distance=li-lj
+  print(min_distance)
   return min_distance
 
 def pjeuler45():
