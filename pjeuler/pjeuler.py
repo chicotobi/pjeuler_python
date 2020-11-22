@@ -495,7 +495,6 @@ def pjeuler47():
       return i-3
 
 def pjeuler48():
-  from .tools import smart_mod
   n = int(1e10)
   s = 0
   for i in range(1,1001):
@@ -555,7 +554,122 @@ def pjeuler51():
                 if new_p in s:
                     counter += 1
             if counter==8:
-              return p             
+              return p    
+
+def pjeuler52():
+  from .tools import digits_int
+  for i in range(1,1000000):
+    d1 = digits_int(i)
+    d1.sort()
+    d2 = digits_int(2*i)
+    d2.sort()
+    if d1==d2:
+      d3 = digits_int(3*i)
+      d3.sort()
+      d4 = digits_int(4*i)
+      d4.sort()
+      d5 = digits_int(5*i)
+      d5.sort()
+      d6 = digits_int(6*i)
+      d6.sort()
+      if d1==d3 and d1==d4 and d1==d5 and d1==d6:
+        break
+  return i
+
+def pjeuler53():
+  from .tools import nchoosek
+  i = 0
+  for n in range(1,101):
+    for k in range(1,n):
+      if nchoosek(n,k)>1e6:
+        i+=1
+  return i
+
+def pjeuler54():
+  def is_royal_flush(ranks, suits):
+      if is_straight(ranks, suits) and is_flush(ranks, suits) and ranks[0] == 10:
+          return 10e6
+      return 0
+  def is_straight_flush(ranks, suits):
+      if is_straight(ranks, suits) and is_flush(ranks, suits):
+          return 9e6
+      return 0
+  def is_four(ranks, suits):
+      x = collections.Counter(ranks).most_common(2)
+      if x[0][1] == 4:
+          return 8e6
+      return 0
+  def is_full_house(ranks, suits):
+      x = collections.Counter(ranks).most_common(2)
+      if x[0][1] == 3 and x[1][1] == 2:
+          return 7e6 + x[0][0]*15 + x[1][0]
+      return 0
+  def is_flush(ranks, suits):
+      if suits[0] == suits[1] and suits[0] == suits[2] and suits[0] == suits[3] and suits[0] == suits[4]:
+          ranks.sort()
+          return 6e6 + ranks[4] * 15 ** 4 + ranks[3] * 15 ** 3 + ranks[2] * 15 ** 2 + ranks[1] * 15 * ranks[0]
+      return 0
+  def is_straight(ranks, suits):
+      x = collections.Counter(ranks).most_common(5)
+      if x[0][1]==1 and ranks[4] - ranks[0] == 4:
+          return 5e6 + ranks[0]
+      return 0
+  def is_three(ranks, suits):
+      x = collections.Counter(ranks).most_common(5)
+      if x[0][1] == 3:
+          tmp = [x[1][0], x[2][0]]
+          tmp.sort()
+          return 4e6 + x[0][0] * 15 ** 2 + tmp[1] * 15 + tmp[0]
+      return 0
+  def is_two_pair(ranks, suits):
+      global value
+      x = collections.Counter(ranks).most_common(5)
+      if x[0][1] == 2 and x[1][1] == 2:
+          tmp = [x[0][0], x[1][0]]
+          tmp.sort()
+          return 3e6 + tmp[1] * 15 ** 2 + tmp[0] * 15 + x[2][0]
+      return 0
+  def is_one_pair(ranks, suits):
+      global value
+      x = collections.Counter(ranks).most_common(5)
+      if x[0][1] == 2:
+          tmp = [x[1][0], x[2][0], x[3][0]]
+          tmp.sort()
+          return 2e6 + x[0][0] * 15 ** 3 + tmp[2] * 15**2 + tmp[1] * 15 + tmp[0]
+      return 0
+  def is_high_card(ranks, suits):
+      global value
+      x = collections.Counter(ranks).most_common(5)
+      if x[0][1] == 1:
+          return 1e6 + ranks[4] * 15 ** 4 + ranks[3] * 15 ** 3 + ranks[2] * 15 ** 2 + ranks[1] * 15 + ranks[0]
+      return 0
+  def hand_to_rankssuits(hand):
+      ranks = [
+          10 if card[0] == 'T' else 11 if card[0] == 'J' else 12 if card[0] == 'Q' else 13 if card[0] == 'K' else 14 if
+          card[0] == 'A' else int(card[0]) for card in hand]
+      suits = [card[1] for card in hand]
+      return ranks, suits
+  def eval_hand(hand):
+      ranks, suits = hand_to_rankssuits(hand)
+      ranks.sort()
+      functions = [is_royal_flush, is_straight_flush, is_four, is_full_house, is_flush,
+                   is_straight, is_three, is_two_pair, is_one_pair, is_high_card]
+      for f in functions:
+        value = f(ranks, suits)
+        if value>0:
+          break
+      return value
+  f = get(54)
+  wins = 0
+  for both_hands in f.readlines():
+      hand1 = both_hands.rstrip().split(' ')[:5]
+      hand2 = both_hands.rstrip().split(' ')[5:]
+      val1 = eval_hand(hand1)
+      val2 = eval_hand(hand2)
+      if val1 > val2:
+          wins += 1
+  f.close()
+  return wins
 
 def pjeuler67():
   n = 100
