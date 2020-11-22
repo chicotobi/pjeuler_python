@@ -216,3 +216,8 @@ def hexagonal_numbers():
     i += 1
     yield i*(2*i-1)
   
+def is_prime(val):
+  for i in range(2,round(val**0.5)+1):
+      if not val%i:
+          return False
+  return True

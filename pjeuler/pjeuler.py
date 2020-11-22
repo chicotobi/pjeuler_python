@@ -671,6 +671,49 @@ def pjeuler54():
   f.close()
   return wins
 
+def pjeuler55():
+  n = 0
+  for i in range(10000):
+      lychrel = True
+      val = i
+      for counter in range(51):
+          str_val = str(val)
+          rev = str_val[::-1]
+          if rev == str_val and counter>0:
+              lychrel = False
+              break
+          val += int(rev)
+      if lychrel:
+          n += 1
+  return n
+
+def pjeuler56():
+  from .tools import digits_int
+  return max([sum(digits_int(a**b)) for a in range(101) for b in range(101)])
+
+def pjeuler57():
+  num = 1
+  den = 2
+  n = 0
+  for i in range(1000):
+      (num,den) = (den, num+2*den)
+      if len(str(num+den)) > len(str(den)):
+          n += 1
+  return n
+
+def pjeuler58():
+  from .tools import is_prime  
+  n_primes = 0
+  i = 0
+  while True:
+    i += 1
+    base = 4*i**2-2*i+1
+    n_primes += sum([is_prime(base+2*j*i) for j in range(4)])
+    ratio = n_primes/(1+4*i)
+    if ratio<0.1:
+        break
+  return 2*i+1
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
