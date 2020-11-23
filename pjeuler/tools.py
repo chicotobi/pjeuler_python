@@ -225,21 +225,31 @@ def is_prime(val):
 def is_prime_mr(val):
   return sympy.ntheory.primetest.mr(val,[2,3,5,7])
 
-def continued_fraction_period_length(n):
+def continued_fraction(n,get_period=False,m=math.inf):
   if math.floor(n**.5)**2==n:
     return 0
   a = math.floor(n**.5)
   b = a
   c = 1
   init = []
-  counter = 0
-  while True:
+  v = []
+  counter = 0    
+  while counter<m:
+    v.append(a)
     a = math.floor((n**.5+b)*c/(n-b*b))
     c = (n-b*b)//c
-    b = a * c - b
-    if init == []:
-      init = [a,b,c]
-    elif [a,b,c]==init:
-      break
+    b = a*c-b
+    if get_period:
+      if init == []:
+        init = [a,b,c]
+      elif [a,b,c]==init:
+        break
     counter += 1
-  return counter
+  if get_period:
+    return counter
+  else:
+    return v
+
+def eval_continued_fraction_vector(z):
+  return functools.reduce(lambda x,y: tuple([x[0]*y[0]+x[1]*y[1],x[0]*y[1]]),
+                          zip(reversed(z),[1]*len(z)))

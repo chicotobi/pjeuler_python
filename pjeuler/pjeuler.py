@@ -813,8 +813,31 @@ def pjeuler63():
   return sum([b==len(str(a**b)) for a in range(1,30) for b in range(1,30)])
 
 def pjeuler64():
-  from .tools import continued_fraction_period_length
-  return sum([1 for i in range(10000) if continued_fraction_period_length(i)%2])
+  from .tools import continued_fraction
+  return sum([1 for i in range(10000) if continued_fraction(i,get_period=True)%2])
+
+def pjeuler65():
+  from .tools import digits_int, eval_continued_fraction_vector
+  N = 100
+  v = [2] + [1 if i%3 else round(i*2/3) for i in range(2,N+1)]
+  return sum(digits_int(eval_continued_fraction_vector(v)[0]))
+
+def pjeuler66():
+  from .tools import continued_fraction,eval_continued_fraction_vector  
+  di = {}
+  for D in range(1000):
+    if round(D**.5)**2 == D:
+      di[D] = D
+    else:
+      j = 0
+      while True:
+        j +=1
+        v = continued_fraction(D, m=j)
+        x, y = eval_continued_fraction_vector(v)
+        if x**2-D*y**2==1:
+          di[D] = x
+          break
+  return max(di,key=di.get)
 
 def pjeuler67():
   n = 100
@@ -831,6 +854,8 @@ def pjeuler67():
     else:
       return a[i,j] + max(f(i+1,j),f(i+1,j+1))
   return f(0,0)
+
+
 
 def pjeuler77():
   from .tools import write_as_prime_sum
