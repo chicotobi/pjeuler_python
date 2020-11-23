@@ -464,7 +464,6 @@ def pjeuler44():
       lj=l[j]
       if li-lj<min_distance and li-lj in s and li+lj in s:
         min_distance=li-lj
-  print(min_distance)
   return min_distance
 
 def pjeuler45():
@@ -855,7 +854,54 @@ def pjeuler67():
       return a[i,j] + max(f(i+1,j),f(i+1,j+1))
   return f(0,0)
 
+def pjeuler68():
+  m = 0
+  for p in itertools.permutations(range(1,11)):
+    if p[0]<min(p[1:5]):    
+      s1 = p[0]+p[5]+p[6]
+      s2 = p[1]+p[6]+p[7] 
+      s3 = p[2]+p[7]+p[8] 
+      s4 = p[3]+p[8]+p[9] 
+      s5 = p[4]+p[9]+p[5]
+      if s1==s2==s3==s4==s5:
+        s = ''.join(str(p[i]) for i in (0,5,6,1,6,7,2,7,8,3,8,9,4,9,5))
+        if len(s)==16:
+          m = max(m,int(s))
+  return m
 
+def pjeuler69():
+  from .tools import primes
+  s = 1
+  for i in primes(100):
+    if s*i<1000000:
+      s *= i
+  return s
+
+def pjeuler70():
+  from .tools import primes
+  N = int(1e7)
+  ps = list(primes(4000))
+  smallps = [i for i in ps if 2000<i]
+  min_quotient=2
+  for i in smallps:
+    for j in smallps:
+      if i*j<N:
+        if ''.join(sorted(str(i*j))) == ''.join(sorted(str((i-1)*(j-1)))):
+          if i*j/(i-1)/(j-1) < min_quotient:
+            min_idx = i*j
+            min_quotient = i*j/(i-1)/(j-1) 
+  return min_idx
+
+def pjeuler71():    
+  x = 3/7
+  y = 0
+  for d in range(1,1000000):
+    if d%7!=0:
+      n = math.floor(x * d)
+      if n/d > y:
+        y = n/d
+        best_n = n
+  return best_n
 
 def pjeuler77():
   from .tools import write_as_prime_sum
