@@ -799,6 +799,23 @@ def pjeuler61():
                                                   if n1//100 == r6:
                                                       return n1+n2+n3+n4+n5+n6
 
+def pjeuler62():
+  d = {}
+  for i in range(100000):
+    val = i**3
+    s = ''.join(sorted(str(val)))
+    if s not in d:
+      d[s] = []
+    d[s].append(val)
+  return min(functools.reduce(lambda x,y:x+y,[v for (k,v) in d.items() if len(v)==5]))
+
+def pjeuler63():
+  return sum([b==len(str(a**b)) for a in range(1,30) for b in range(1,30)])
+
+def pjeuler64():
+  from .tools import continued_fraction_period_length
+  return sum([1 for i in range(10000) if continued_fraction_period_length(i)%2])
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")

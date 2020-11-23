@@ -1,4 +1,4 @@
-import numpy as np	
+import numpy as np
 import math
 import collections
 import functools
@@ -73,7 +73,7 @@ def gcd(*args):
     l = [collections.Counter(factors(x)) for x in args]
     r = functools.reduce(lambda a,b:a&b,l)
     return np.prod([x**y for (x,y) in r.items()])
-    
+
 def digits(s):
     return [int(a) for a in s]
 
@@ -82,10 +82,10 @@ def collatz(n):
     return int(n/2)
   else:
     return 3*n+1
-  
+
 def nchoosek(n,k):
   return int(math.factorial(n)/(math.factorial(k)*math.factorial(n-k)))
-  
+
 def triangle_numbers():
   i = 0
   m = 1
@@ -93,7 +93,7 @@ def triangle_numbers():
     i += m
     yield i
     m += 1
-    
+
 def num2word(num):
     wrds = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen']
     wrds_2 = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
@@ -118,7 +118,7 @@ def num2word(num):
         return s
     s += '-' + wrds[d-1]
     return s
-  
+
 def write_as_prime_sum(l,n,maxp):
   ps = primes(maxp)
   vals = 0
@@ -168,7 +168,7 @@ def smart_mod(base,exp,mod):
   a = [base%mod]
   for i in range(len(b)-1):
     a.append((a[-1]**2)%mod)
-  
+
   v = np.array(a)[np.array(b)==1]
   w = functools.reduce(lambda x,y:smart_mod_prod(x,y,mod),v)
   return w
@@ -197,24 +197,24 @@ def periodic_decimal(denom):
 
 def is_pentagonal(x):
   n = 1/6*((24*x+1)**.5+1)
-  return abs(n-round(n))<1e-8 
- 
+  return abs(n-round(n))<1e-8
+
 def is_triangle(x):
   n = 1/2*((8*x+1)**.5-1)
-  return abs(n-round(n))<1e-8  
+  return abs(n-round(n))<1e-8
 
 def pentagonal_numbers():
   i=0
   while True:
     i +=1
     yield int(i*(3*i-1)/2)
-    
+
 def hexagonal_numbers():
   i = 0
   while True:
     i += 1
     yield i*(2*i-1)
-  
+
 def is_prime(val):
   for i in range(2,round(val**0.5)+1):
       if not val%i:
@@ -224,3 +224,22 @@ def is_prime(val):
 @functools.lru_cache(None)
 def is_prime_mr(val):
   return sympy.ntheory.primetest.mr(val,[2,3,5,7])
+
+def continued_fraction_period_length(n):
+  if math.floor(n**.5)**2==n:
+    return 0
+  a = math.floor(n**.5)
+  b = a
+  c = 1
+  init = []
+  counter = 0
+  while True:
+    a = math.floor((n**.5+b)*c/(n-b*b))
+    c = (n-b*b)//c
+    b = a * c - b
+    if init == []:
+      init = [a,b,c]
+    elif [a,b,c]==init:
+      break
+    counter += 1
+  return counter
