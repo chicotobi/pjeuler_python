@@ -762,6 +762,43 @@ def pjeuler60():
                   s = min(s,k1+k2+k3+k4+k5)
   return s
 
+def pjeuler61():
+  a3 = [i*(1*i+1)//2 for i in range(200)]
+  a4 = [i*(2*i-0)//2 for i in range(200)]
+  a5 = [i*(3*i-1)//2 for i in range(200)]
+  a6 = [i*(4*i-2)//2 for i in range(200)]
+  a7 = [i*(5*i-3)//2 for i in range(200)]
+  a8 = [i*(6*i-4)//2 for i in range(200)]
+  
+  a3 = [i for i in a3 if 1000<=i<=9999]
+  a4 = [i for i in a4 if 1000<=i<=9999]
+  a5 = [i for i in a5 if 1000<=i<=9999]
+  a6 = [i for i in a6 if 1000<=i<=9999]
+  a7 = [i for i in a7 if 1000<=i<=9999]
+  a8 = [i for i in a8 if 1000<=i<=9999]
+  
+  a = [a4,a5,a6,a7,a8]
+  for p in itertools.permutations(range(5)):
+      for n1 in a3:
+          r1 = n1 % 100
+          for n2 in a[p[0]]:
+              if n2//100 == r1:
+                  r2 = n2 % 100
+                  for n3 in a[p[1]]:
+                      if n3//100 == r2:
+                          r3 = n3 % 100
+                          for n4 in a[p[2]]:
+                              if n4//100 == r3:
+                                  r4 = n4 % 100
+                                  for n5 in a[p[3]]:
+                                      if n5//100 == r4:
+                                          r5 = n5 % 100
+                                          for n6 in a[p[4]]:
+                                              if n6//100 == r5:
+                                                  r6 = n6 % 100
+                                                  if n1//100 == r6:
+                                                      return n1+n2+n3+n4+n5+n6
+
 def pjeuler67():
   n = 100
   a = np.zeros((n,n),dtype="uint32")
