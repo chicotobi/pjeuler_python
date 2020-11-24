@@ -15,7 +15,7 @@ def get(i):
     from pathlib import Path
     home = str(Path.home())
     return open(home+'/pjeuler_python/pjeuler/input/'+str(i))
-  
+
 def pjeuler1():
   val = 0
   for i in range(1000):
@@ -46,14 +46,14 @@ def pjeuler4():
 def pjeuler5():
   from .tools import lcm
   return lcm(range(1,21))
-    
+
 def pjeuler6():
   return sum(range(101))**2-sum([i**2 for i in range(101)])
-  
+
 def pjeuler7():
   from .tools import primes
   return list(primes(110000))[10000]
-  
+
 def pjeuler8():
   from .tools import digits
   f = get(8)
@@ -61,8 +61,8 @@ def pjeuler8():
   f.close()
   return max([np.prod(digits(a[i:i+13])) for i in range(len(a)-13)])
 
-def pjeuler9():  
-  from .tools import gcd  
+def pjeuler9():
+  from .tools import gcd
   get_a = lambda k,m,n: k*(m**2-n**2)
   get_b = lambda k,m,n: 2*k*m*n
   get_c = lambda k,m,n: k*(m**2+n**2)
@@ -103,7 +103,7 @@ def pjeuler12():
   for t in triangle_numbers():
     if n_divs(t)>500:
       return t
-    
+
 def pjeuler13():
   v = 0
   f = get(13)
@@ -211,11 +211,11 @@ def pjeuler23():
     if sum_divs(i)>i:
       l = l+[i]
       for j in l:
-        k = i + j 
+        k = i + j
         if k<n:
           l2[k] = 1
   return sum([i for i,j in enumerate(l2) if j==0])
- 
+
 def pjeuler24():
   symbols = [0,1,2,3,4,5,6,7,8,9]
   n = len(symbols)
@@ -234,7 +234,7 @@ def pjeuler25():
   for (i,j) in enumerate(fib2()):
     if math.log10(j)>999:
       return i+1
-    
+
 def pjeuler26():
   from .tools import periodic_decimal, primes
   d = {p: len(periodic_decimal(p)) for p in primes(1000)}
@@ -392,7 +392,7 @@ def pjeuler38():
   return m
 
 def pjeuler39():
-  from .tools import gcd  
+  from .tools import gcd
   get_a = lambda k,m,n: k*(m**2-n**2)
   get_b = lambda k,m,n: 2*k*m*n
   get_c = lambda k,m,n: k*(m**2+n**2)
@@ -422,7 +422,7 @@ def pjeuler41():
   s = set(primes(10000000))
   s2 = [i for i in s if is_pandigital(i)]
   return max(s2)
-    
+
 def pjeuler42():
   from .tools import lettervalue, triangle_numbers
   f = get(42)
@@ -490,7 +490,7 @@ def pjeuler46():
           break
       if not found:
         return 2*i+1
-      
+
 def pjeuler47():
   from .tools import factors
   run = 0
@@ -511,7 +511,7 @@ def pjeuler48():
       k = (k*i)%n
     s = (s+k)%n
   return s
-    
+
 def pjeuler49():
   from .tools import primes, digits_int
   d = 3330
@@ -562,7 +562,7 @@ def pjeuler51():
                 if new_p in s:
                     counter += 1
             if counter==8:
-              return p    
+              return p
 
 def pjeuler52():
   from .tools import digits_int
@@ -710,7 +710,7 @@ def pjeuler57():
   return n
 
 def pjeuler58():
-  from .tools import is_prime  
+  from .tools import is_prime
   n_primes = 0
   i = 0
   while True:
@@ -726,18 +726,18 @@ def pjeuler59():
   f = get(59)
   arr = [int(a) for a in f.readlines()[0].split(',')]
   f.close()
-  
+
   k1 = np.bitwise_xor(32,collections.Counter(arr[0::3]).most_common(1)[0][0])
   k2 = np.bitwise_xor(32,collections.Counter(arr[1::3]).most_common(1)[0][0])
   k3 = np.bitwise_xor(32,collections.Counter(arr[2::3]).most_common(1)[0][0])
   my_key = [k1,k2,k3]*(len(arr)//3)
-  
+
   return sum([x^y for(x,y) in zip(arr,my_key)])
 
 def pjeuler60():
   from .tools import primes, is_prime_mr
   ps = list(primes(9000))
-  
+
   di = {p: [] for p in ps}
   for p1 in ps:
    for p2 in ps:
@@ -745,7 +745,7 @@ def pjeuler60():
       if is_prime_mr(int(str(p1)+str(p2))) and is_prime_mr(int(str(p2)+str(p1))):
         di[p1] += [p2]
         di[p2] += [p1]
-  
+
   s = 1e10
   for (k1,v1) in di.items():
     for k2 in v1:
@@ -768,14 +768,14 @@ def pjeuler61():
   a6 = [i*(4*i-2)//2 for i in range(200)]
   a7 = [i*(5*i-3)//2 for i in range(200)]
   a8 = [i*(6*i-4)//2 for i in range(200)]
-  
+
   a3 = [i for i in a3 if 1000<=i<=9999]
   a4 = [i for i in a4 if 1000<=i<=9999]
   a5 = [i for i in a5 if 1000<=i<=9999]
   a6 = [i for i in a6 if 1000<=i<=9999]
   a7 = [i for i in a7 if 1000<=i<=9999]
   a8 = [i for i in a8 if 1000<=i<=9999]
-  
+
   a = [a4,a5,a6,a7,a8]
   for p in itertools.permutations(range(5)):
       for n1 in a3:
@@ -822,7 +822,7 @@ def pjeuler65():
   return sum(digits_int(eval_continued_fraction_vector(v)[0]))
 
 def pjeuler66():
-  from .tools import continued_fraction,eval_continued_fraction_vector  
+  from .tools import continued_fraction,eval_continued_fraction_vector
   di = {}
   for D in range(1000):
     if round(D**.5)**2 == D:
@@ -857,11 +857,11 @@ def pjeuler67():
 def pjeuler68():
   m = 0
   for p in itertools.permutations(range(1,11)):
-    if p[0]<min(p[1:5]):    
+    if p[0]<min(p[1:5]):
       s1 = p[0]+p[5]+p[6]
-      s2 = p[1]+p[6]+p[7] 
-      s3 = p[2]+p[7]+p[8] 
-      s4 = p[3]+p[8]+p[9] 
+      s2 = p[1]+p[6]+p[7]
+      s3 = p[2]+p[7]+p[8]
+      s4 = p[3]+p[8]+p[9]
       s5 = p[4]+p[9]+p[5]
       if s1==s2==s3==s4==s5:
         s = ''.join(str(p[i]) for i in (0,5,6,1,6,7,2,7,8,3,8,9,4,9,5))
@@ -889,10 +889,10 @@ def pjeuler70():
         if ''.join(sorted(str(i*j))) == ''.join(sorted(str((i-1)*(j-1)))):
           if i*j/(i-1)/(j-1) < min_quotient:
             min_idx = i*j
-            min_quotient = i*j/(i-1)/(j-1) 
+            min_quotient = i*j/(i-1)/(j-1)
   return min_idx
 
-def pjeuler71():    
+def pjeuler71():
   x = 3/7
   y = 0
   for d in range(1,1000000):
@@ -902,6 +902,53 @@ def pjeuler71():
         y = n/d
         best_n = n
   return best_n
+
+def pjeuler72():
+  from .tools import primes
+  N = int(1e6)
+  a = list(range(N+1))
+  for p in primes(N):
+    for i in range(math.ceil(N/p)+1):
+      if i*p<N+1:
+        a[i*p] = a[i*p] * (p-1) // p
+  return sum(a[2:])
+
+def pjeuler73():
+  N = int(12000)
+  a = list(range(4,N+1))
+  counter = 0
+  for d in a:
+    n1 = math.ceil(d/3)
+    n2 = math.floor(d/2)
+    for n in range(n1,n2+1):
+      if math.gcd(n,d)==1:
+        counter += 1
+  return counter
+
+def pjeuler74():
+  import pjeuler, math, functools
+  fac = [math.factorial(i) for i in range(10)]
+
+  @functools.lru_cache(None)
+  def f(x):
+    return sum([fac[i] for i in pjeuler.digits_int(x)])
+
+  @functools.lru_cache(None)
+  def g(x0):
+    x1 = f(x0)
+    x2 = f(x1)
+    if x0==x2:
+      return 2
+    x3 = f(x2)
+    if x0==x3:
+      return 3
+    return g(x1)+1
+
+  n = 0
+  for i in range(int(1e6)):
+    if g(i)==60:
+      n += 1
+  return n
 
 def pjeuler77():
   from .tools import write_as_prime_sum
@@ -916,7 +963,7 @@ def pjeuler85():
     for j in range(100):
         if(abs(f(i,j)-2000000)<1e3):
             return i*j
-          
+
 def pjeuler97():
   from .tools import smart_mod
   mod = int(1e10)
