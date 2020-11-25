@@ -974,7 +974,7 @@ def pjeuler76():
       c += split(number-i,i)
     if min_size<=number:
       c += 1
-    return c  
+    return c
   return split(100,1)-1
 
 def pjeuler77():
@@ -983,6 +983,67 @@ def pjeuler77():
   while write_as_prime_sum([],i,i)<=5000:
     i += 1
   return i
+
+def pjeuler78():
+  @functools.lru_cache(None)
+  def p(n):
+    if n<0:
+      return 0
+    if n<=1:
+      return 1
+    k = 1
+    x = 0
+    k_min = math.floor(-((24*n+1)**.5-1)/6)
+    k_max = math.ceil(((24*n+1)**.5+1)/6)+1
+    for k in range(k_min,k_max):
+      if k==0:
+        continue
+      idx = k*(3*k-1)//2
+      val = p(n-idx)
+      if k%2==0:
+        x -= val
+      else:
+        x += val
+    return x
+  i = 0
+  while True:
+    i += 1
+    x = p(i)
+    if x%1000000==0:
+      break
+  return i
+
+def pjeuler79():
+  f = get(79)
+  d = [i.strip() for i in f.readlines()]
+  f.close()
+
+  key = 0
+  while True:
+    for c in range(10):
+      flag = False
+      for row in d:
+        if row[0]==str(c):
+          flag = True
+        if str(c) in row[1:]:
+          flag = False
+          break
+      if flag:
+        key = 10*key+c
+        d = [d[i][1:] if d[i][0]==str(c) else d[i] for i in range(len(d))]
+        d = [i for i in d if len(i)>0]
+        if len(d)==0:
+          return key
+
+def pjeuler80():
+  import mpmath
+  from .tools import digits
+  mpmath.mp.dps = 102
+  s = 0
+  for i in range(2,101):
+    if round(i**.5)**2 != i:
+      s += sum(digits(str(mpmath.mp.sqrt(i)).replace(".","")[:100]))
+  return s
 
 def pjeuler85():
   f = lambda a,b: a*(a+1)*b*(b+1)/4
