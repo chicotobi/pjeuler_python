@@ -950,6 +950,33 @@ def pjeuler74():
       n += 1
   return n
 
+def pjeuler75():
+  N = 1500000
+  l = [0]*(N+1)
+  k_max = N//2
+  for k in range(1,k_max+1):
+    m_max = math.floor((N//(2*k))**.5)
+    for m in range(1,m_max+1):
+      n_max = min(m,N//(2*k*m) - m)
+      for n in range(1,n_max+1):
+        s = 2*k*m*(m+n)
+        if s<=N:
+          if (m*n)%2==0:
+            if math.gcd(m,n)==1:
+              l[s] +=1
+  return sum([1 for (idx,i) in enumerate(l) if i==1])
+
+def pjeuler76():
+  @functools.lru_cache(None)
+  def split(number,min_size):
+    c = 0
+    for i in range(min_size,number-min_size+1):
+      c += split(number-i,i)
+    if min_size<=number:
+      c += 1
+    return c  
+  return split(100,1)-1
+
 def pjeuler77():
   from .tools import write_as_prime_sum
   i = 2
