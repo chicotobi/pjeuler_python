@@ -1045,6 +1045,63 @@ def pjeuler80():
       s += sum(digits(str(mpmath.mp.sqrt(i)).replace(".","")[:100]))
   return s
 
+def pjeuler81():
+  a = np.zeros((80,80),dtype="uint32")
+  f = get(81)
+  for (i,line) in enumerate(f):
+    for (j,val) in enumerate(str.split(line,sep=",")):
+     a[i,j] = int(val)
+  f.close()
+  @functools.lru_cache(None)
+  def f(i,j):
+    if i==0 and j==0:
+      v = 0
+    elif i==0:
+      v = f(i,j-1)
+    elif j==0:
+      v = f(i-1,j)
+    else:
+      v = min(f(i-1,j),f(i,j-1))
+    return v+a[i,j]
+  return f(79,79)
+
+def pjeuler82():
+  n = 80
+  a = np.zeros((n,n),dtype="uint32")
+  f = get(82)
+  for (i,line) in enumerate(f):
+    for (j,val) in enumerate(str.split(line,sep=",")):
+      a[i,j] = int(val)
+  f.close()
+  @functools.lru_cache(None)
+  def f(i,j,l1,l2):
+    if j==0:
+      return a[i,0]
+    # up
+    if i>0 and l1!="down":
+      v_up = f(i-1,j,"up",l1)
+    else:
+      v_up = math.inf
+    # down
+    if i<n-1 and l2!="up":
+      v_down = f(i+1,j,"down",l1)
+    else:
+      v_down = math.inf
+    # left
+    if j>0:
+      v_left = f(i,j-1,"left",l1)
+    else:
+      v_left = math.inf
+    result = a[i,j] + min(v_up,v_down,v_left)
+    return result
+
+  for j in range(n):
+    vv = math.inf
+    for i in range(n):
+      vv = min(vv,f(i,j,"left","left"))
+  return vv
+
+
 def pjeuler85():
   f = lambda a,b: a*(a+1)*b*(b+1)/4
   for i in range(100):
