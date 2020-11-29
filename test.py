@@ -42,6 +42,7 @@ class TestProblems(unittest.TestCase):
          161667,190569291,71,55374,73162890,40886,
          427337,260324]
     sols = dict(zip(range(1,len(s)+1),s))
+    sols[84] = 101524
     sols[85] = 2772
     sols[87] = 1097343
     sols[89] = 743
