@@ -1109,7 +1109,240 @@ def pjeuler85():
         if(abs(f(i,j)-2000000)<1e3):
             return i*j
 
+def pjeuler87():
+  from .tools import primes
+  N = 50000000
+  l = list(primes(math.floor(N**.5)))
+  a = [False]*N
+  for p2 in l:
+    s = p2**2
+    for p3 in l:
+      t = s + p3**3
+      if t<N:
+        for p4 in l:
+          u = t + p4**4
+          if u<N:
+            a[u] = True
+  return sum(a)
+
+def pjeuler89():
+  def parse(s):
+    s=s.replace('CM','DCCCC')
+    s=s.replace('CD','CCCC')
+    s=s.replace('XC','LXXXX')
+    s=s.replace('XL','XXXX')
+    s=s.replace('IX','VIIII')
+    s=s.replace('IV','IIII')
+    di = {'I':1,'V':5,'X':10,'L':50,'C':100,'D':500,'M':1000}
+    return sum([di[c] for c in s])
+
+  def write(n):
+    n1000 = n//1000
+    n = n%1000
+    n100 = n//100
+    n = n%100
+    n10 = n//10
+    n = n%10
+    n1 = n
+    s1000 = 'M'*n1000
+
+    if n100 in [1,2,3]:
+      s100 = 'C'*n100
+    elif n100 in [4]:
+      s100 = 'CD'
+    elif n100 in [5,6,7,8]:
+      s100 = 'D' + 'C'*(n100-5)
+    elif n100 in [9]:
+      s100 = 'CM'
+    else:
+      s100 = ''
+
+    if n10 in [1,2,3]:
+      s10 = 'X'*n10
+    elif n10 in [4]:
+      s10 = 'XL'
+    elif n10 in [5,6,7,8]:
+      s10 = 'L' + 'X'*(n10-5)
+    elif n10 in [9]:
+      s10 = 'XC'
+    else:
+      s10 = ''
+
+    if n1 in [1,2,3]:
+      s1 = 'I'*n1
+    elif n1 in [4]:
+      s1 = 'IV'
+    elif n1 in [5,6,7,8]:
+      s1 = 'V' + 'I'*(n1-5)
+    elif n1 in [9]:
+      s1 = 'IX'
+    else:
+      s1 = ''
+
+    return s1000+s100+s10+s1
+
+  save = 0
+  f = get(89)
+  for r in f.readlines():
+    rs = r.strip()
+    n = parse(rs)
+    r2 = write(n)
+    save += len(rs)-len(r2)
+  f.close()
+  return save
+
+def pjeuler91():
+  n = 0
+  m = 50
+  for x1 in range(m+1):
+    for y1 in range(m+1):
+      for x2 in range(m+1):
+        for y2 in range(m+1):
+          if x1!=x2 or y1!=y2:
+            if x1+y1>0 and x2+y2>0:
+              a2 = x1**2+y1**2
+              b2 = x2**2+y2**2
+              c2 = (x1-x2)**2+(y1-y2)**2
+              if a2+b2==c2 or a2+c2==b2 or b2+c2==a2:
+                n +=1
+  return n//2
+
+def pjeuler92():
+  from .tools import digits_int
+  @functools.lru_cache(None)
+  def f(x):
+    return sum(np.array(digits_int(x))**2)
+  n = 10000000
+  l = [0]*(n+1)
+  l[1]=1
+  l[89]=2
+  for i in range(2,n+1):
+    v = i
+    while True:
+      if v < n+1 and l[v]!=0:
+        l[i]=l[v]
+        break
+      v = f(v)
+  return sum(np.array(l)==2)
+
+def pjeuler93():
+  def apply(x,y):
+    l = [x+y,x-y,y-x,x*y]
+    if x!=0:
+      l += [y/x]
+    if y!=0:
+      l += [x/y]
+    return l
+  di = dict()
+  for a in range(1,10):
+    for b in range(a+1,10):
+      for c in range(b+1,10):
+        for d in range(c+1,10):
+          arr = [False]*10000
+          arr[0] = True
+          for i in itertools.permutations([a,b,c,d]):
+            for r1 in apply(i[0],i[1]):
+              for r2 in apply(r1,i[2]):
+                for r3 in apply(r2,i[3]):
+                  if abs(round(r3)-r3)<1e-8 and r3>0:
+                    arr[round(r3)] = True
+              for r2 in apply(i[2],i[3]):
+                for r3 in apply(r1,r2):
+                  if abs(round(r3)-r3)<1e-8 and r3>0:
+                    arr[round(r3)] = True
+          di[a*1000+b*100+c*10+d] = min([idx for (idx,i) in enumerate(arr) if not i])-1
+  return max(di, key=di.get)
+
+def pjeuler96():
+  import copy
+
+  f = get(96)
+  a = np.empty((9,9),dtype=object)
+  s = []
+  for (i,l) in enumerate(f):
+    if i%10==0:
+      a = np.empty((9,9),dtype=object)
+    if i%10!=0:
+      v = [int(j) for j in l.rstrip()]
+      for j in range(9):
+        if v[j]==0:
+          a[(i-1)%10,j] = [1,2,3,4,5,6,7,8,9]
+        else:
+          a[(i-1)%10,j] = [v[j]]
+    if i%10==9:
+      s.append(a)
+  f.close()
+
+  def solve_sudoku(a):
+    while True:
+      finished = True
+      progress = False
+      for i in range(9):
+        for j in range(9):
+          if len(a[i,j])==0:
+            return None, False
+          if len(a[i,j])==1:
+            # Found a single number, delete other possibilities:
+            v = a[i,j][0]
+            for k in range(9):
+              if k!= i and v in a[k,j]:
+                a[k,j].remove(v)
+                progress = True
+              if k!= j and v in a[i,k]:
+                a[i,k].remove(v)
+                progress = True
+            for k1 in range(3):
+              for k2 in range(3):
+                idx1 = math.floor(i/3)*3 + k1
+                idx2 = math.floor(j/3)*3 + k2
+                if idx1!=i and idx2!=j and v in a[idx1,idx2]:
+                  a[idx1,idx2].remove(v)
+                  progress = True
+          else:
+            finished = False
+      if finished:
+        return a, True
+      if not progress:
+        # Guess
+        found = False
+        for i in range(9):
+          for j in range(9):
+            if len(a[i,j])>1:
+              found = True
+              break
+          if found:
+            break
+        v = a[i,j][0]
+        b = copy.deepcopy(a)
+        b[i,j] = [v]
+        b, val = solve_sudoku(b)
+        if val:
+          return b, True
+        a[i,j].remove(v)
+
+  sol = 0
+  for counter in range(len(s)):
+    a,_ = solve_sudoku(s[counter])
+    tmp = a[0,0][0]*100+a[0,1][0]*10+a[0,2][0]
+    sol += tmp
+  return sol
+
 def pjeuler97():
   from .tools import smart_mod
   mod = int(1e10)
   return (28433*smart_mod(2,7830457,mod)+1)%mod
+
+def pjeuler99():
+  f = get(99)
+  max_idx = -1
+  max_val = 0
+  for (idx,i) in enumerate(f.readlines()):
+    a,b = i.rsplit(",")
+    a = int(a)
+    b = int(b)
+    if b*math.log(a) > max_val:
+      max_idx = idx
+      max_val = b*math.log(a)
+  f.close()
+  return max_idx + 1
+

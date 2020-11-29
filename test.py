@@ -43,7 +43,14 @@ class TestProblems(unittest.TestCase):
          427337,260324]
     sols = dict(zip(range(1,len(s)+1),s))
     sols[85] = 2772
+    sols[87] = 1097343
+    sols[89] = 743
+    sols[91] = 14234
+    sols[92] = 8581146
+    sols[93] = 1258
+    sols[96] = 24702
     sols[97] = 8739992577
+    sols[99] = 709
     #sols = {k:v for (k,v) in sols.items() if k>75}
 
     print()
