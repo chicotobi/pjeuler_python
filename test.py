@@ -21,7 +21,7 @@ def mypr(i,t,sol,res):
   print("Problem",str(i).rjust(3), " took ",str(round(t,2)).rjust(5)," seconds. Expected ",str(sol).rjust(15)," Got ",str(res).rjust(15))
 
 class TestProblems(unittest.TestCase):
-  def test(self):
+  def test_first100(self):
 
     # Solution definition
     s = [233168,4613732,6857,906609,232792560,
@@ -52,12 +52,28 @@ class TestProblems(unittest.TestCase):
     sols[96] = 24702
     sols[97] = 8739992577
     sols[99] = 709
-    #sols = {k:v for (k,v) in sols.items() if k>75}
+    sols[100] = 756872327473
+    #sols = {k:v for (k,v) in sols.items() if k>99}
 
     print()
     for idx, sol in sols.items():
       t0 = time.time()
       res = pjeuler.pjeuler(idx)
+      t = time.time() - t0
+      self.assertEqual(sol,res)
+      mypr(idx,t,sol,res)
+    print()
+    
+  def test_rest(self):
+    sols = {}
+    sols[101] = 'd382b0cc25e82446da83d3a792e1cd27'
+    sols[102] = '74db120f0a8e5646ef5a30154e9f6deb'
+    sols[107] = 'b0db1202ec966e7855ca23626eb285b8'
+    
+    print()
+    for idx, sol in sols.items():
+      t0 = time.time()
+      res = pjeuler.my_hash(pjeuler.pjeuler(idx))
       t = time.time() - t0
       self.assertEqual(sol,res)
       mypr(idx,t,sol,res)

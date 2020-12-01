@@ -16,6 +16,10 @@ def get(i):
     home = str(Path.home())
     return open(home+'/pjeuler_python/pjeuler/input/'+str(i))
 
+def my_hash(n):
+  import hashlib
+  return hashlib.md5(str(n).encode('utf-8')).hexdigest()
+
 def pjeuler1():
   val = 0
   for i in range(1000):
@@ -1103,14 +1107,14 @@ def pjeuler82():
 
 def pjeuler84():
   import numpy as np
-  
+
   def f(field,doubles):
     return 40*doubles+field
-    
+
   n = 4
   p = 1/n**2
   jail = 10
-  
+
   # Dice matrix
   a = np.zeros((120,120))
   for i in range(40):
@@ -1127,7 +1131,7 @@ def pjeuler84():
             a[f(i,1),f(jail,2)] += p
             a[f(i,2),f(jail,0)] += p
         else:
-          if j!=k:        
+          if j!=k:
             a[f(i,0),f(idx,0)] += p
             a[f(i,1),f(idx,0)] += p
             a[f(i,2),f(idx,0)] += p
@@ -1136,8 +1140,8 @@ def pjeuler84():
             a[f(i,1),f(idx,2)] += p
             a[f(i,2),f(jail,0)]  += p
   a = a.transpose()
-   
-  # Card matrix      
+
+  # Card matrix
   b = np.zeros((40,40))
   for i in range(40):
     if i in [2,17,33]:
@@ -1162,23 +1166,23 @@ def pjeuler84():
         b[i,28] += 1/16
       elif i==36:
         b[i,5] += 2/16
-        b[i,12] += 1/16 
+        b[i,12] += 1/16
       b[i,(i-3)] += 1/16
     else:
       b[i,i] += 1
   b = b.transpose()
-  
-  # B as block matrix  
+
+  # B as block matrix
   z = np.zeros((40,40))
   b = np.block([
     [b,z,z],
     [z,b,z],
     [z,z,b]
   ])
-  
+
   # Build game matrix
   c = b.dot(a)
-  
+
   # Eigen decomposition
   w,v = np.linalg.eig(c)
   x = abs(v[:,0])
@@ -1432,3 +1436,58 @@ def pjeuler99():
   f.close()
   return max_idx + 1
 
+def pjeuler100():
+  b = 3
+  n = 4
+  while n<1e12:
+      (b,n) = (3*b+2*n-2, 4*b+3*n-3)
+  return b
+
+def pjeuler101():
+  import scipy.interpolate
+  def g(x):
+    return 1-x+x**2-x**3+x**4-x**5+x**6-x**7+x**8-x**9+x**10
+  x = range(1,11)
+  y = [g(i) for i in x]
+  s = 0
+  for j in range(1,11):
+    v = scipy.interpolate.barycentric_interpolate(x[:j],y[:j],j+1)
+    s += round(v.tolist())
+  return s
+
+def pjeuler102():
+  f = get(102)
+  n = 0
+  for i in f:
+    t = [int(i) for i in i.rsplit(',')]
+
+    p0x = t[0]
+    p0y = t[1]
+    p1x = t[2]
+    p1y = t[3]
+    p2x = t[4]
+    p2y = t[5]
+    Area = 0.5 *(-p1y*p2x + p0y*(-p1x + p2x) + p0x*(p1y - p2y) + p1x*p2y)
+    s = 1/(2*Area)*(p0y*p2x - p0x*p2y)
+    t = 1/(2*Area)*(p0x*p1y - p0y*p1x)
+
+    if s>0 and t>0 and 1-s-t>0:
+      n += 1
+  f.close()
+  return n
+
+def pjeuler107():
+  import scipy.sparse.csgraph
+  f = get(107)
+  a = np.zeros((40,40))
+  i = 0
+  for l in f:
+    j = 0
+    for c in l.rsplit(','):
+      if c!='-' and c!='-\n':
+        a[i,j] = int(c.rstrip())
+      j += 1
+    i += 1
+  f.close()
+  res = scipy.sparse.csgraph.minimum_spanning_tree(a)
+  return int(.5 * np.sum(a)-np.sum(res))
