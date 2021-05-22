@@ -1105,6 +1105,43 @@ def pjeuler82():
       vv = min(vv,f(i,j,"left","left"))
   return vv
 
+def pjeuler83():  
+  import scipy.sparse.csgraph
+  n = 80
+  a = np.zeros((80,80),dtype="uint32")
+  f = get(83)
+  for (i,line) in enumerate(f):
+      for (j,val) in enumerate(str.split(line,sep=",")):
+          a[i,j] = int(val)
+  f.close()
+  
+  def idx(i,j):
+      return i*n+j
+  
+  edge = 0
+  b = np.zeros((np.prod(a.shape),np.prod(a.shape)))
+  for i in range(n):
+      for j in range(n):
+          idx1 = idx(i,j)
+          val1 = a[i,j]
+          if i<a.shape[0]-1:
+              idx2 = idx(i+1,j)
+              val2 = a[i+1,j]
+              b[idx1,idx2] = (val1+val2)/2
+              b[idx2,idx1] = (val1+val2)/2
+              edge +=1
+          if j<a.shape[0]-1:
+              idx2 = idx(i,j+1)
+              val2 = a[i,j+1]
+              b[idx1,idx2] = (val1+val2)/2
+              b[idx2,idx1] = (val1+val2)/2
+              edge +=1
+              
+  s = a[0,0]/2 + a[n-1,n-1]/2
+  
+  result = scipy.sparse.csgraph.dijkstra(b,indices=0)
+  return result[n*n-1]+s
+          
 def pjeuler84():
   import numpy as np
 
@@ -1199,6 +1236,44 @@ def pjeuler85():
         if(abs(f(i,j)-2000000)<1e3):
             return i*j
 
+def pjeuler86():  
+  low = 100
+  high = 2000  
+  
+  while True:
+    s = 0
+    M = round(0.5*(low+high))
+    for m in range(1,M):
+        for n in range(1,m):
+            if math.gcd(m,n)==1 and (m*n)%2==0:
+                kmax = M//(m*n)+1
+                for k in range(kmax+1):
+                    n1 = k * (m**2-n**2)
+                    n2 = 2*k*m*n
+                    if n1>n2:
+                        v = n2-(n1-1)//2
+                        if n2 <= M and v>0:
+                            s += v
+                        v = n2//2
+                        if n1 <= M:
+                            s += v
+                    if n2>n1:
+                        if n2 <= M:
+                            s += n1//2
+                        v = n1-(n2-1)//2
+                        if n1 <= M and v>0:
+                            s += v
+                    if n2==n1:
+                        if n2 <= M:
+                            s += (n1+n2)//2
+    if s<1e6:
+      low = M
+    else:
+      high = M
+    if low+1 == high:
+      break
+  return high
+
 def pjeuler87():
   from .tools import primes
   N = 50000000
@@ -1214,6 +1289,45 @@ def pjeuler87():
           if u<N:
             a[u] = True
   return sum(a)
+
+def pjeuler88():
+  import sympy.utilities.iterables
+  
+  def primes(limit):
+      a = [True] * (limit+1)
+      a[0] = a[1] = False
+      for (i, isprime) in enumerate(a):
+          if isprime:
+              yield i
+              for n in range(i*i, limit+1, i):
+                  a[n] = False
+  
+  @functools.lru_cache(None)
+  def factors(m):
+    if m in sps:
+      return [int(m)]
+    for p in ps:
+      if m % p == 0:
+          m /= p
+          return [p] + factors(m)
+  
+  N = 12000
+  ps = list(primes(2*N))
+  sps = set(ps)
+  
+  min_k = {i:2*i for i in range(2,N+1)}
+  
+  for i in range(2,2*N+1):
+      for partition in sympy.utilities.iterables.multiset_partitions(factors(i)):
+          tmp = [np.prod(i) for i in partition]
+          s = sum(tmp)
+          if i-s>=0:
+              nfacs = len(tmp)
+              k = i - s + nfacs
+              if k>1 and k<N+1 and i<min_k[k]:
+                  min_k[k]=i
+  
+  return sum(set(min_k.values()))
 
 def pjeuler89():
   def parse(s):
@@ -1281,6 +1395,21 @@ def pjeuler89():
   f.close()
   return save
 
+def pjeuler90():
+  import itertools  
+  
+  def check(i,j):
+      return (i in l1 and j in l2) or (j in l1 and i in l2)  
+    
+  def check6(i):
+      return (i in l1 and (6 in l2 or 9 in l2)) or ((6 in l1 or 9 in l1) and i in l2)  
+  s = 0
+  for l1 in itertools.combinations(range(10),6):
+      for l2 in itertools.combinations(range(10),6):
+          if check(0,1) and check(0,4) and check6(0) and check6(1) and check(2,5) and check6(3) and check6(4) and check(8,1):
+              s += 1
+  return s//2
+
 def pjeuler91():
   n = 0
   m = 50
@@ -1342,6 +1471,84 @@ def pjeuler93():
                     arr[round(r3)] = True
           di[a*1000+b*100+c*10+d] = min([idx for (idx,i) in enumerate(arr) if not i])-1
   return max(di, key=di.get)
+
+def pjeuler94():
+  def is_square(x):    
+      return round(x**.5)**2==x
+  
+  s = 0
+  l = [5, 17, 65, 241, 901, 3361, 12545, 46817, 174725, 652081, 2433601, 9082321, 33895685, 126500417, 472105985,1761923521]
+  
+  for i in l:
+    a = i
+    b = i
+    c = i+1
+    perimeter = (a+b+c)
+    p = perimeter//2
+    area2 = p*(p-a)*(p-b)*(p-c)
+    if is_square(area2) and perimeter<1e9:
+        s += perimeter
+    a = i
+    b = i
+    c = i-1
+    perimeter = (a+b+c)
+    p = perimeter//2
+    area2 = p*(p-a)*(p-b)*(p-c)
+    if is_square(area2) and perimeter<1e9:
+        s += perimeter
+  return s
+
+def pjeuler95():
+  from .tools import primes
+        
+  @functools.lru_cache(None)          
+  def factors(m):
+    if m in sps:
+      return [int(m)]
+    for p in ps:
+      if m % p == 0:
+          m /= p
+          return [p] + factors(m)
+  
+  @functools.lru_cache(None)
+  def sum_divs(x):
+    if x in sps or x==1:
+        return 1
+    y=collections.Counter(factors(x))
+    return int(np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x)
+  
+  N = int(1e6)
+  
+  ps = list(primes(int(N)))
+  sps = set(ps)
+  
+  longest_chain = 0
+  
+  s = [0]*(N+1)
+  
+  for i in range(2,N+1):
+      if s[i]!=0:
+          continue
+      k = i
+      li = [k]
+      s[k] = -1
+      periodicity = 0
+      while True:
+          k = sum_divs(k)
+          if k>N:
+              break
+          if k in li:
+              idx = li.index(k)
+              periodicity = len(li) - idx
+              if periodicity>longest_chain:
+                  longest_chain = periodicity
+                  result = min(li[idx:])
+              break
+          if s[k] != 0:
+              break
+          s[k] = -1
+          li += [k]
+  return result
 
 def pjeuler96():
   import copy
@@ -1422,6 +1629,44 @@ def pjeuler97():
   mod = int(1e10)
   return (28433*smart_mod(2,7830457,mod)+1)%mod
 
+def pjeuler98():
+  f = get(98)
+  words = [i[1:-1] for i in f.readline().rsplit(",")]
+  f.close()
+  
+  def all_different_digits(x):
+      return len(set([c for c in str(x)]))==n
+  
+  def get_permutation(word1,word2):
+      w1 = [c for c in word1]
+      w2 = [c for c in word2]
+      return [w2.index(i) for i in w1]    
+      
+  
+  final_list = []
+  for i in range(len(words)):
+      vi = sorted(words[i])
+      for j in range(i+1,len(words)):
+          vj = sorted(words[j])
+          if vi==vj:        
+              n = len(words[i])
+              lower = math.ceil((10**(n-1))**.5)
+              upper = math.floor((10**n)**.5)
+                          
+              perm = get_permutation(words[i],words[j])
+              
+              arr = []                
+              for k in range(lower,upper+1):
+                  v2 = k**2
+                  if len(str(v2))==n and all_different_digits(v2):
+                      arr += [str(v2)]
+              
+              for k in arr:
+                  v3 = ''.join([k[perm[m]] for m in range(n)])
+                  if v3 in arr:
+                      final_list += [int(k), int(v3)]
+  return max(final_list)
+
 def pjeuler99():
   f = get(99)
   max_idx = -1
@@ -1491,3 +1736,73 @@ def pjeuler107():
   f.close()
   res = scipy.sparse.csgraph.minimum_spanning_tree(a)
   return int(.5 * np.sum(a)-np.sum(res))
+
+def pjeuler109():
+  fields = []
+  for m in range(1,4):
+    for n in list(range(1,21))+[25]:
+      if m!=3 or n!=25:
+        fields += [(m,n)]
+  sols = 0
+  for number in range(1,100):
+    for (m1,n1) in fields:
+        remain = number
+        v = m1*n1
+        if v > remain:
+          continue
+        if v == remain and m1 == 2:
+          sols += 1
+          continue
+        remain2 = remain - v
+        for (m2,n2) in fields:
+          v = m2*n2
+          if v > remain2:
+            continue
+          if v == remain2 and m2 == 2:
+            sols += 1
+            continue
+          if m2>m1 or (m2==m1 and n2>=n1):
+            remain3 = remain2 - v
+            for (m3,n3) in fields:
+              v = m3*n3
+              if v == remain3 and m3 == 2:
+                sols += 1
+                continue
+  return sols
+
+def pjeuler122():
+  dct = {1:set()}
+  dct[1].add(frozenset())
+  s = 0
+  for k in range(2,201):
+    dct[k] = set()
+    vmin = 100
+    for j1 in range(1,k):
+      j2 = k - j1
+      for s1 in dct[j1]:
+        for s2 in dct[j2]:
+          sol = set([k])
+          sol = sol.union(s1).union(s2)
+          v = len(sol)
+          if v < vmin:
+            dct[k] = set()
+            dct[k].add(frozenset(sol))
+            vmin = v
+          elif v == vmin:
+            dct[k].add(frozenset(sol))
+    s += vmin
+  return s
+
+def pjeuler317():
+  from math import sin, cos, pi, asin, sqrt
+  def max_dist(v,g,h,theta):
+    return v*cos(theta)/g * (v*sin(theta)+sqrt(v**2*sin(theta)**2+2*g*h))
+  h = 100
+  v = 20
+  g = 9.81
+  k = 2*g*h/v**2
+  theta = asin(1/sqrt(k+2))
+  dist = max_dist(v,g,h,theta)
+  height = h + v**2/2/g
+  V = pi/2 * dist**2 * height
+  return round(V*10000)/10000

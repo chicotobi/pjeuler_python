@@ -40,20 +40,11 @@ class TestProblems(unittest.TestCase):
          661,7273,6531031914842725,510510,8319823,
          428570,303963552391,7295372,402,
          161667,190569291,71,55374,73162890,40886,
-         427337,260324]
+         427337,260324,425185,101524,2772,
+         1818,1097343,7587457,743,1217,
+         14234,8581146,1258,518408346,14316,
+         24702,8739992577,18769,709,756872327473]
     sols = dict(zip(range(1,len(s)+1),s))
-    sols[84] = 101524
-    sols[85] = 2772
-    sols[87] = 1097343
-    sols[89] = 743
-    sols[91] = 14234
-    sols[92] = 8581146
-    sols[93] = 1258
-    sols[96] = 24702
-    sols[97] = 8739992577
-    sols[99] = 709
-    sols[100] = 756872327473
-    #sols = {k:v for (k,v) in sols.items() if k>99}
 
     print()
     for idx, sol in sols.items():
@@ -69,6 +60,8 @@ class TestProblems(unittest.TestCase):
     sols[101] = 'd382b0cc25e82446da83d3a792e1cd27'
     sols[102] = '74db120f0a8e5646ef5a30154e9f6deb'
     sols[107] = 'b0db1202ec966e7855ca23626eb285b8'
+    sols[109] = 'e6aebd5be1ba81557dbcc5f6f57bbe5c'
+    sols[122] = 'b710915795b9e9c02cf10d6d2bdb688c'
     
     print()
     for idx, sol in sols.items():
