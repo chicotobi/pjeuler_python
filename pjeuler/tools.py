@@ -253,3 +253,10 @@ def continued_fraction(n,get_period=False,m=math.inf):
 def eval_continued_fraction_vector(z):
   return functools.reduce(lambda x,y: tuple([x[0]*y[0]+x[1]*y[1],x[0]*y[1]]),
                           zip(reversed(z),[1]*len(z)))
+
+def digit_sum(x):
+  s = 0
+  while x>9:
+    s += x%10
+    x = x//10
+  return s+x

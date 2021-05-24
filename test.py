@@ -22,7 +22,6 @@ def mypr(i,t,sol,res):
 
 class TestProblems(unittest.TestCase):
   def test_first100(self):
-
     # Solution definition
     s = [233168,4613732,6857,906609,232792560,
          25164150,104743,23514624000,31875000,142913828922,
@@ -59,9 +58,22 @@ class TestProblems(unittest.TestCase):
     sols = {}
     sols[101] = 'd382b0cc25e82446da83d3a792e1cd27'
     sols[102] = '74db120f0a8e5646ef5a30154e9f6deb'
+    sols[104] = 'c8771ddd4df191098d70a8e94dd1cde7'
     sols[107] = 'b0db1202ec966e7855ca23626eb285b8'
     sols[109] = 'e6aebd5be1ba81557dbcc5f6f57bbe5c'
+    sols[112] = 'e08c982713a1c2bd3637dd489199722e'
+    sols[114] = 'de48ca72bf252a8be7e0aad762eadcf8'
+    sols[115] = '006f52e9102a8d3be2fe5614f42ba989'
+    sols[116] = 'c21ca0ec54e6d1646a953a480f68feb4'
+    sols[117] = '542612809b3dd08cf518b85450fce8d6'
+    sols[119] = '72fddfa6c52a120892ade628f3819da4'
+    sols[120] = '0dd05ec40fe11279c2203b72e92a450a'
+    sols[121] = '51de85ddd068f0bc787691d356176df9'
     sols[122] = 'b710915795b9e9c02cf10d6d2bdb688c'
+    sols[123] = '71497f728b86b55d965edbf1849cca8d'
+    sols[124] = 'f228d2e6f9099153388e9470180c8302'
+    sols[125] = '1b5635e8ab723e01570ca783129493dd'
+    sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     
     print()
     for idx, sol in sols.items():

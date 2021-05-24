@@ -3,6 +3,7 @@ import functools
 import itertools
 import collections
 import numpy as np
+import pandas as pd
 
 def pjeuler(i):
   return eval("pjeuler"+str(i)+"()")
@@ -1721,6 +1722,23 @@ def pjeuler102():
   f.close()
   return n
 
+def pjeuler104():
+  a = 1
+  b = 1
+  k = 2
+  arr = '123456789'
+  while True:
+    k += 1
+    b, a = a+b, b
+    end = b%1000000000
+    end = ''.join(sorted(str(end)))==arr
+    if end:
+      begin = b//10**math.ceil(math.log10(b)-9)
+      begin = ''.join(sorted(str(begin)))==arr
+      if begin:
+        break
+  return k
+
 def pjeuler107():
   import scipy.sparse.csgraph
   f = get(107)
@@ -1770,28 +1788,185 @@ def pjeuler109():
                 continue
   return sols
 
-def pjeuler122():
-  dct = {1:set()}
-  dct[1].add(frozenset())
+def pjeuler112():
+  def d(x):
+    l = []
+    while x>9:
+      l.append(x%10)
+      x = x//10
+    l.append(x)
+    l.reverse()
+    return l
+    
+  def is_bouncy(n):
+    digs = d(n)
+    b1 = True
+    b2 = True
+    for i in range(len(digs)-1):
+      if digs[i]>digs[i+1]:
+        b1 = False
+      if digs[i]<digs[i+1]:
+        b2 = False
+    return not b1 and not b2
+  
+  n = 0
+  i = 0
+  while True:
+    i += 1
+    n += is_bouncy(i)
+    if n*100==i*99:
+      break
+  return i
+
+def pjeuler114():
+  @functools.lru_cache(None)
+  def split(l,red_allowed):
+      if l<3:
+          return 1
+      n = 0
+      n += split(l-1,True)
+      if red_allowed:
+          for i in range(3,l+1):
+              n += split(l-i,False)
+      return n
+  return split(50,True)
+
+def pjeuler115():
+  @functools.lru_cache(None)
+  def split(m,l,red_allowed):
+      if l<0:
+          return 0
+      if l<2:
+          return 1
+      n = 0
+      n += split(m,l-1,True)
+      if red_allowed:
+          for i in range(m,l+1):
+              n += split(m,l-i,False)
+      return n
+      
+  n = 50
+  while True:
+      if split(50,n,True) > 1000000:
+          break
+      n += 1
+  return n
+
+def pjeuler116():
+  @functools.lru_cache(None)
+  def split(l,c):
+      if l<c:
+          return 1
+      return split(l-1,c)+split(l-c,c)
+  return split(50,2)+split(50,3)+split(50,4)-3
+
+def pjeuler117():
+  @functools.lru_cache(None)
+  def split(l):
+      if l<0:
+          return 0
+      if l<2:
+          return 1
+      return sum([split(l-i) for i in range(1,5)])
+  return split(50)
+
+def pjeuler119():
+  from .tools import digit_sum
+  l = []
+  for base in range(2,100):
+    for exp in range(2,10):
+      if digit_sum(base**exp)==base:
+        l.append(base**exp)
+  l.sort()
+  return l[29]
+
+def pjeuler120():
+  N = 1000
   s = 0
-  for k in range(2,201):
-    dct[k] = set()
-    vmin = 100
-    for j1 in range(1,k):
-      j2 = k - j1
-      for s1 in dct[j1]:
-        for s2 in dct[j2]:
-          sol = set([k])
-          sol = sol.union(s1).union(s2)
-          v = len(sol)
-          if v < vmin:
-            dct[k] = set()
-            dct[k].add(frozenset(sol))
-            vmin = v
-          elif v == vmin:
-            dct[k].add(frozenset(sol))
-    s += vmin
+  for a in range(3,N+1):
+      r = 2*a
+      rmax = r
+      while r != 0:
+          rmax = max(rmax,r)
+          r = (r+2*a)%(a**2)
+      s += rmax
   return s
+
+def pjeuler121():
+  from .tools import int2base, digits
+  p0 = 0
+  n = 15
+  for i in range(2**n):
+    v = int2base(i,2).zfill(n)
+    if 2*sum(digits(v)) > n:
+      p = 1 
+      for j in range(n):
+        if v[j]=='1':
+          p *= 1/(j+2)
+        else:
+          p *= (j+1)/(j+2)
+      p0 += p
+  return math.floor(1/p0)
+
+def pjeuler122():
+  x = 200
+  l = [None,[set([1])]]
+  su = 0
+  for k in range(2,x+1):
+    sols = []
+    for j1 in range(1,k//2+1):
+      for s1 in l[k-j1]:
+        if j1 in s1:
+          sols.append(s1.union([k]))
+    vmin = min(len(s) for s in sols)
+    l.append([s for s in sols if len(s) == vmin])
+    su += vmin-1
+  return su
+
+def pjeuler123():
+  from .tools import primes
+  ps = list(primes(250000))  
+  v = 1e10  
+  low = 1
+  high = len(ps)
+  while True:
+    n = round(0.5*(low+high))
+    if 2 * (n+1) * ps[n] < v:
+      low = n
+    else:
+      high = n
+    if low+1==high:
+      break
+  if high % 2 == 0:
+    result = high + 1
+  else:
+    result = high + 2
+  return result
+
+def pjeuler124():
+  from .tools import factors  
+  a = []
+  l = 100000
+  for i in range(1,l+1):
+    a.append(np.prod(np.unique(factors(i))))    
+  df = pd.DataFrame({"n":range(1,l+1),"radn":a})  
+  return df.sort_values(["radn","n"]).reset_index().drop("index",axis=1).n[10000-1]
+
+def pjeuler125():
+  from .tools import is_palindrome
+  sols = []
+  m = 1e8
+  for i in range(1,math.floor((m/2)**.5)+1):
+    j = i
+    n = j**2
+    while True:
+      j += 1
+      n += j**2
+      if n>=m:
+        break
+      if is_palindrome(n):
+        sols.append(n)
+  return sum(set(sols))
 
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
