@@ -1,5 +1,6 @@
 import copy
-f = open('d185')
+f = open('/home/chicotobi/pjeuler_python/d185_example')
+f = open('/home/chicotobi/pjeuler_python/d185')
 
 cor = []
 d = []
@@ -19,8 +20,8 @@ def solve(x,cor):
     else:
       return False
   for i in range(10):
-    if len(x[0]) == 8:
-      print("hi")
+    if len(x[0])==10:
+        print("hi "+x[0])
     cor_new = []
     for (row_x,row_cor) in zip(x,cor):
       if row_x[0]==str(i):
@@ -31,8 +32,6 @@ def solve(x,cor):
     result = solve(x_new,cor_new)
     if type(result) is str:
       return str(i)+result
-    else:
-      continue
   return False
 
-solve(d,cor)
+res = solve(d,cor)
