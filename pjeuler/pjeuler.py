@@ -61,10 +61,12 @@ def pjeuler7():
 
 def pjeuler8():
   from .tools import digits
+  from functools import reduce
   f = get(8)
-  a = f.read()
+  a = digits(f.read())
   f.close()
-  return max([np.prod(digits(a[i:i+13])) for i in range(len(a)-13)])
+  m = lambda a,b: a*b
+  return max([reduce(m,a[i:i+13]) for i in range(len(a)-13)])
 
 def pjeuler9():
   from .tools import gcd
@@ -1106,7 +1108,7 @@ def pjeuler82():
       vv = min(vv,f(i,j,"left","left"))
   return vv
 
-def pjeuler83():  
+def pjeuler83():
   import scipy.sparse.csgraph
   n = 80
   a = np.zeros((80,80),dtype="uint32")
@@ -1115,10 +1117,10 @@ def pjeuler83():
       for (j,val) in enumerate(str.split(line,sep=",")):
           a[i,j] = int(val)
   f.close()
-  
+
   def idx(i,j):
       return i*n+j
-  
+
   edge = 0
   b = np.zeros((np.prod(a.shape),np.prod(a.shape)))
   for i in range(n):
@@ -1137,12 +1139,12 @@ def pjeuler83():
               b[idx1,idx2] = (val1+val2)/2
               b[idx2,idx1] = (val1+val2)/2
               edge +=1
-              
+
   s = a[0,0]/2 + a[n-1,n-1]/2
-  
+
   result = scipy.sparse.csgraph.dijkstra(b,indices=0)
   return result[n*n-1]+s
-          
+
 def pjeuler84():
   import numpy as np
 
@@ -1237,10 +1239,10 @@ def pjeuler85():
         if(abs(f(i,j)-2000000)<1e3):
             return i*j
 
-def pjeuler86():  
+def pjeuler86():
   low = 100
-  high = 2000  
-  
+  high = 2000
+
   while True:
     s = 0
     M = round(0.5*(low+high))
@@ -1293,7 +1295,7 @@ def pjeuler87():
 
 def pjeuler88():
   import sympy.utilities.iterables
-  
+
   def primes(limit):
       a = [True] * (limit+1)
       a[0] = a[1] = False
@@ -1302,7 +1304,7 @@ def pjeuler88():
               yield i
               for n in range(i*i, limit+1, i):
                   a[n] = False
-  
+
   @functools.lru_cache(None)
   def factors(m):
     if m in sps:
@@ -1311,13 +1313,13 @@ def pjeuler88():
       if m % p == 0:
           m /= p
           return [p] + factors(m)
-  
+
   N = 12000
   ps = list(primes(2*N))
   sps = set(ps)
-  
+
   min_k = {i:2*i for i in range(2,N+1)}
-  
+
   for i in range(2,2*N+1):
       for partition in sympy.utilities.iterables.multiset_partitions(factors(i)):
           tmp = [np.prod(i) for i in partition]
@@ -1327,7 +1329,7 @@ def pjeuler88():
               k = i - s + nfacs
               if k>1 and k<N+1 and i<min_k[k]:
                   min_k[k]=i
-  
+
   return sum(set(min_k.values()))
 
 def pjeuler89():
@@ -1397,13 +1399,13 @@ def pjeuler89():
   return save
 
 def pjeuler90():
-  import itertools  
-  
+  import itertools
+
   def check(i,j):
-      return (i in l1 and j in l2) or (j in l1 and i in l2)  
-    
+      return (i in l1 and j in l2) or (j in l1 and i in l2)
+
   def check6(i):
-      return (i in l1 and (6 in l2 or 9 in l2)) or ((6 in l1 or 9 in l1) and i in l2)  
+      return (i in l1 and (6 in l2 or 9 in l2)) or ((6 in l1 or 9 in l1) and i in l2)
   s = 0
   for l1 in itertools.combinations(range(10),6):
       for l2 in itertools.combinations(range(10),6):
@@ -1428,10 +1430,15 @@ def pjeuler91():
   return n//2
 
 def pjeuler92():
-  from .tools import digits_int
   @functools.lru_cache(None)
   def f(x):
-    return sum(np.array(digits_int(x))**2)
+    i = 0
+    while x>9:
+      d = x%10
+      i += d*d
+      x = x//10
+    return i+x*x
+
   n = 10000000
   l = [0]*(n+1)
   l[1]=1
@@ -1443,7 +1450,7 @@ def pjeuler92():
         l[i]=l[v]
         break
       v = f(v)
-  return sum(np.array(l)==2)
+  return sum([1 for i in l if i==2])
 
 def pjeuler93():
   def apply(x,y):
@@ -1474,12 +1481,12 @@ def pjeuler93():
   return max(di, key=di.get)
 
 def pjeuler94():
-  def is_square(x):    
+  def is_square(x):
       return round(x**.5)**2==x
-  
+
   s = 0
   l = [5, 17, 65, 241, 901, 3361, 12545, 46817, 174725, 652081, 2433601, 9082321, 33895685, 126500417, 472105985,1761923521]
-  
+
   for i in l:
     a = i
     b = i
@@ -1501,8 +1508,8 @@ def pjeuler94():
 
 def pjeuler95():
   from .tools import primes
-        
-  @functools.lru_cache(None)          
+
+  @functools.lru_cache(None)
   def factors(m):
     if m in sps:
       return [int(m)]
@@ -1510,23 +1517,23 @@ def pjeuler95():
       if m % p == 0:
           m /= p
           return [p] + factors(m)
-  
+
   @functools.lru_cache(None)
   def sum_divs(x):
     if x in sps or x==1:
         return 1
     y=collections.Counter(factors(x))
     return int(np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x)
-  
+
   N = int(1e6)
-  
+
   ps = list(primes(int(N)))
   sps = set(ps)
-  
+
   longest_chain = 0
-  
+
   s = [0]*(N+1)
-  
+
   for i in range(2,N+1):
       if s[i]!=0:
           continue
@@ -1634,34 +1641,34 @@ def pjeuler98():
   f = get(98)
   words = [i[1:-1] for i in f.readline().rsplit(",")]
   f.close()
-  
+
   def all_different_digits(x):
       return len(set([c for c in str(x)]))==n
-  
+
   def get_permutation(word1,word2):
       w1 = [c for c in word1]
       w2 = [c for c in word2]
-      return [w2.index(i) for i in w1]    
-      
-  
+      return [w2.index(i) for i in w1]
+
+
   final_list = []
   for i in range(len(words)):
       vi = sorted(words[i])
       for j in range(i+1,len(words)):
           vj = sorted(words[j])
-          if vi==vj:        
+          if vi==vj:
               n = len(words[i])
               lower = math.ceil((10**(n-1))**.5)
               upper = math.floor((10**n)**.5)
-                          
+
               perm = get_permutation(words[i],words[j])
-              
-              arr = []                
+
+              arr = []
               for k in range(lower,upper+1):
                   v2 = k**2
                   if len(str(v2))==n and all_different_digits(v2):
                       arr += [str(v2)]
-              
+
               for k in arr:
                   v3 = ''.join([k[perm[m]] for m in range(n)])
                   if v3 in arr:
@@ -1797,7 +1804,7 @@ def pjeuler112():
     l.append(x)
     l.reverse()
     return l
-    
+
   def is_bouncy(n):
     digs = d(n)
     b1 = True
@@ -1808,7 +1815,7 @@ def pjeuler112():
       if digs[i]<digs[i+1]:
         b2 = False
     return not b1 and not b2
-  
+
   n = 0
   i = 0
   while True:
@@ -1844,7 +1851,7 @@ def pjeuler115():
           for i in range(m,l+1):
               n += split(m,l-i,False)
       return n
-      
+
   n = 50
   while True:
       if split(50,n,True) > 1000000:
@@ -1899,7 +1906,7 @@ def pjeuler121():
   for i in range(2**n):
     v = int2base(i,2).zfill(n)
     if 2*sum(digits(v)) > n:
-      p = 1 
+      p = 1
       for j in range(n):
         if v[j]=='1':
           p *= 1/(j+2)
@@ -1925,8 +1932,8 @@ def pjeuler122():
 
 def pjeuler123():
   from .tools import primes
-  ps = list(primes(250000))  
-  v = 1e10  
+  ps = list(primes(250000))
+  v = 1e10
   low = 1
   high = len(ps)
   while True:
@@ -1944,12 +1951,12 @@ def pjeuler123():
   return result
 
 def pjeuler124():
-  from .tools import factors  
+  from .tools import factors
   a = []
   l = 100000
   for i in range(1,l+1):
-    a.append(np.prod(np.unique(factors(i))))    
-  df = pd.DataFrame({"n":range(1,l+1),"radn":a})  
+    a.append(np.prod(np.unique(factors(i))))
+  df = pd.DataFrame({"n":range(1,l+1),"radn":a})
   return df.sort_values(["radn","n"]).reset_index().drop("index",axis=1).n[10000-1]
 
 def pjeuler125():
@@ -1981,3 +1988,54 @@ def pjeuler317():
   height = h + v**2/2/g
   V = pi/2 * dist**2 * height
   return round(V*10000)/10000
+
+def pjeuler357():
+  from .tools import primes
+  from sympy import divisors
+  n = 100000000
+  primes = list(primes(n))
+  set_ps = set(primes)
+  nums = [p-1 for p in primes]
+  smalls = [p for p in primes if p<n**.5]
+
+  s = 0
+  for(c,n) in enumerate(nums):
+
+    # n = \prod_{i=1}^m p_i
+    b = True
+    for p in smalls:
+      # Check if square-free
+      if n%(p*p) == 0:
+        b = False
+        break
+      # Check if \prod_{i=1, i\neq j}^m p_i + p_j is prime
+      if n%p == 0:
+        v = p + n//p
+        if v not in set_ps:
+          b = False
+          break
+    if not b:
+      continue
+
+    # Check if \prod_{i=1, i\neq j, i\neq k}^m p_i + p_j p_k is prime
+    for p1 in smalls:
+      if n%p1==0:
+        for p2 in smalls:
+          if p2>p1 :
+            if n%(p1*p2) == 0:
+              v = p1*p2 + n//(p1*p2)
+              if v not in set_ps:
+                b = False
+                break
+        if not b:
+          break
+    if not b:
+      continue
+
+    # Now just check directly all divisors
+    for d in divisors(n):
+      if n//d + d not in set_ps:
+        b = False
+    if b:
+      s += n
+  return s

@@ -53,7 +53,7 @@ class TestProblems(unittest.TestCase):
       self.assertEqual(sol,res)
       mypr(idx,t,sol,res)
     print()
-    
+
   def test_rest(self):
     sols = {}
     sols[101] = 'd382b0cc25e82446da83d3a792e1cd27'
@@ -74,7 +74,8 @@ class TestProblems(unittest.TestCase):
     sols[124] = 'f228d2e6f9099153388e9470180c8302'
     sols[125] = '1b5635e8ab723e01570ca783129493dd'
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
-    
+    sols[357] = 'ed25b13b18a21c1077fed00ef42f503b'
+
     print()
     for idx, sol in sols.items():
       t0 = time.time()
