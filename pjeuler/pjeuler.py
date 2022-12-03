@@ -1989,6 +1989,24 @@ def pjeuler317():
   V = pi/2 * dist**2 * height
   return round(V*10000)/10000
 
+def pjeuler345():
+  @functools.lru_cache(None)
+  def val(m):
+    n = len(m)
+    if n == 1:
+      return m[0][0]
+    v = 0
+    for i in range(n):
+      m0 = tuple(row[1:] for (x,row) in enumerate(m) if x!=i)
+      v0 = m[i][0] + val(m0)
+      v = max(v,v0)
+    return v
+  
+  d = get(345).read().splitlines()
+  d = [i.split() for i in d]
+  d = tuple(tuple(int(i) for i in j) for j in d)
+  return val(d)
+
 def pjeuler357():
   from .tools import primes
   from sympy import divisors
