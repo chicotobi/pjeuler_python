@@ -75,9 +75,11 @@ class TestProblems(unittest.TestCase):
     sols[123] = '71497f728b86b55d965edbf1849cca8d'
     sols[124] = 'f228d2e6f9099153388e9470180c8302'
     sols[125] = '1b5635e8ab723e01570ca783129493dd'
+    sols[126] = '387d6ae83cbc6fa0b9192b56bf095c49'
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'
     sols[357] = 'ed25b13b18a21c1077fed00ef42f503b'
+    sols[493] = 'e7a3d17e900134dd57ae44da7e31603c'
 
     print()
     for idx, sol in sols.items():

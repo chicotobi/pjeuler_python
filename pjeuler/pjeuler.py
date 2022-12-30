@@ -2032,6 +2032,30 @@ def pjeuler125():
         sols.append(n)
   return sum(set(sols))
 
+def pjeuler126():
+  def calc(a,b,c,n):
+    return 2*(a*b+a*c+b*c) + 4 * (n-1) * (a+b+c+n-2)
+
+  vol_max = 200000
+  counter_max = 20000
+
+  counter = [0]*counter_max
+
+  for a in range(1,vol_max+1):
+    for b in range(1,min(vol_max//a,a+1)):
+      for c in range(1,min(vol_max//(a*b),b+1)):
+        n = 1
+        while True:
+          v = calc(a,b,c,n)
+          if v >= counter_max:
+            break
+          counter[v] += 1
+          n += 1
+
+  for (i,v) in enumerate(counter):
+    if v==1000:
+      return i        
+
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
   def max_dist(v,g,h,theta):
@@ -2114,3 +2138,7 @@ def pjeuler357():
     if b:
       s += n
   return s
+
+def pjeuler493():
+  from scipy.special import comb
+  return round(7*(1-comb(60,20)/comb(70,20)),9)
