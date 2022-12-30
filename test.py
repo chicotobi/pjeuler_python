@@ -80,6 +80,7 @@ class TestProblems(unittest.TestCase):
     sols[345] = 'cf3b784c8593890043b17e24088125d4'
     sols[357] = 'ed25b13b18a21c1077fed00ef42f503b'
     sols[493] = 'e7a3d17e900134dd57ae44da7e31603c'
+    sols[808] = 'b3026f0182a9ff9bbe9193fa55c87d03'
 
     print()
     for idx, sol in sols.items():

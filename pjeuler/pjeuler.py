@@ -2142,3 +2142,18 @@ def pjeuler357():
 def pjeuler493():
   from scipy.special import comb
   return round(7*(1-comb(60,20)/comb(70,20)),9)
+
+def pjeuler808():
+  from .tools import primes
+  s = 0
+  n = 0
+  for i in primes(100_000_000):
+    x = int(str(i**2)[::-1])
+    j = round(x**.5)
+    if j**2 == x:
+      if i != j:
+        if sympy.isprime(j):
+          n += 1
+          s += i**2
+          if n == 50:
+            return s
