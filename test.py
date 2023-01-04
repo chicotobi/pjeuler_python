@@ -82,6 +82,9 @@ class TestProblems(unittest.TestCase):
     sols[172] = 'f5f260ee21ead7478403c2ccd18a1829'
     sols[173] = '177f825c89a68aefae37b8dec9bb8a9b'
     #sols[177] = 'd7a85236af930db0f7e84f2de8ee7ac2'
+    sols[179] = 'bafa0132bc7fc422a8d53bebb9d003c9'
+    sols[187] = 'b3e6977523511d2cbbef8fccb1e394db'
+    sols[191] = 'e04dfa598b22a87570f63063f3ff595d'
 
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'

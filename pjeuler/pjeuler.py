@@ -2222,6 +2222,73 @@ def pjeuler177():
       t.add((a,b,c,d,e,f,g,h))
   return len(t)
 
+def pjeuler179():
+  n = int(1e7)
+  l = [0]*n
+  s = 0
+  for i in range(1,n):
+    for j in range(i,n,i):
+      l[j] += 1
+    if l[i]==l[i-1]:
+      s += 1
+  return s
+
+def pjeuler187():
+  def primes(n):
+    sieve = [True] * (n//2)
+    for i in range(3,int(n**0.5)+1,2):
+        if sieve[i//2]:
+            sieve[i*i//2::i] = [False] * ((n-i*i-1)//(2*i)+1)
+    return [2] + [2*i+1 for i in range(1,n//2) if sieve[i]]
+
+  l = int(1e8)
+  ps = list(primes(l//2))
+  n = len(ps)
+  n_primes = [0,0]
+  for i in range(n-1):
+    n_primes += [i+1] * (ps[i+1]-ps[i])
+  n_primes += [i+2] * (l-ps[-1])
+
+  s = 0
+  for p in ps:
+    if p**2 > l:
+      break
+    p2 = l // p
+    s += n_primes[p2] - n_primes[p-1]
+  return s
+
+def pjeuler191():
+  # n = 2 => sol = 8
+  # 00 0A 0L A0 AA AL L0 LA
+  with_l_ending_LA_0A          = 1 # LA
+  with_l_ending_AA             = 0 #
+  with_l_ending_0L_AL_L0_00_A0 = 3 # 0L AL L0
+  no_l_ending_0A      = 1
+  no_l_ending_AA      = 1
+  no_l_ending_00_A0   = 2
+  n = with_l_ending_LA_0A + with_l_ending_AA + with_l_ending_0L_AL_L0_00_A0 + no_l_ending_0A + no_l_ending_AA + no_l_ending_00_A0
+
+  for k in range(3,31):
+      new_no_l_ending_0A    = no_l_ending_00_A0
+      new_no_l_ending_AA    = no_l_ending_0A
+      new_no_l_ending_00_A0 = no_l_ending_00_A0 + no_l_ending_0A + no_l_ending_AA
+
+      new_with_l_ending_LA_0A = with_l_ending_0L_AL_L0_00_A0
+      new_with_l_ending_AA = with_l_ending_LA_0A
+      new_with_l_ending_0L_AL_L0_00_A0 = no_l_ending_0A + no_l_ending_AA + no_l_ending_00_A0 +\
+          with_l_ending_0L_AL_L0_00_A0 + with_l_ending_LA_0A +\
+              with_l_ending_AA
+
+      no_l_ending_0A = new_no_l_ending_0A
+      no_l_ending_AA = new_no_l_ending_AA
+      no_l_ending_00_A0 = new_no_l_ending_00_A0
+
+      with_l_ending_LA_0A = new_with_l_ending_LA_0A
+      with_l_ending_AA = new_with_l_ending_AA
+      with_l_ending_0L_AL_L0_00_A0 = new_with_l_ending_0L_AL_L0_00_A0
+
+      n = with_l_ending_LA_0A + with_l_ending_AA + with_l_ending_0L_AL_L0_00_A0 + no_l_ending_0A + no_l_ending_AA + no_l_ending_00_A0
+  return n
 
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
