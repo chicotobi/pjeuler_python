@@ -78,6 +78,7 @@ class TestProblems(unittest.TestCase):
     sols[125] = '1b5635e8ab723e01570ca783129493dd'
     sols[126] = '387d6ae83cbc6fa0b9192b56bf095c49'
     sols[145] = '705e8444ad9c92e9a7589fb97515a9b6'
+    #sols[155] = 'da0a3fc900cc8ae42d514e280524ee39'
     sols[169] = 'd149d4836703a8908becea56ddd3ed42'
     sols[172] = 'f5f260ee21ead7478403c2ccd18a1829'
     sols[173] = '177f825c89a68aefae37b8dec9bb8a9b'
@@ -85,6 +86,11 @@ class TestProblems(unittest.TestCase):
     sols[179] = 'bafa0132bc7fc422a8d53bebb9d003c9'
     sols[187] = 'b3e6977523511d2cbbef8fccb1e394db'
     sols[191] = 'e04dfa598b22a87570f63063f3ff595d'
+    sols[199] = '0f8fd87159c28ae5fea6ac91a95d48dd'
+
+    sols[203] = 'd7ec16d216c923d3c927f46cfc914e92'
+    sols[205] = 'ba6c6c3888227a0799eca38191b587be'
+    sols[206] = '09f9d87cb4b1ebb34e1f607e55a351d8'
 
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'

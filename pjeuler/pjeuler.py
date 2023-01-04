@@ -6,6 +6,7 @@ import collections
 import numpy as np
 import pandas as pd
 import sympy
+import scipy
 
 def pjeuler(i):
   return eval("pjeuler"+str(i)+"()")
@@ -2098,6 +2099,28 @@ def pjeuler145():
       return 100*500**(n//4)
   return sum([sols(n) for n in range(1,10)])
 
+def pjeuler155():
+  from fractions import Fraction as f
+  di = {1:[f(60,1)]}
+  nmax = 18
+  possible = set(di[1])
+  print(1,len(possible))
+  for n in range(2,nmax+1):
+      di[n] = []
+      for n1 in range(1,math.floor(n/2)+1):
+          n2 = n - n1
+          for el1 in di[n1]:
+              for el2 in di[n2]:
+                  v1 = el1 + el2
+                  v2 = f(1,f(1,el1)+f(1,el2))
+                  di[n] += [v1]
+                  di[n] += [v2]
+      s = set(di[n])
+      di[n] = list(s)
+      di[n] = [el for el in di[n] if el not in possible]
+      possible = possible.union(s)
+  return len(possible)
+
 def pjeuler169():
   @cache
   def f(x):
@@ -2289,6 +2312,83 @@ def pjeuler191():
 
       n = with_l_ending_LA_0A + with_l_ending_AA + with_l_ending_0L_AL_L0_00_A0 + no_l_ending_0A + no_l_ending_AA + no_l_ending_00_A0
   return n
+
+def pjeuler199():
+  import math
+
+  k = 1+2/math.sqrt(3)
+
+  ratio = 1 - 3 * 1/k**2
+  gaps = [(-1,k,k),(-1,k,k),(-1,k,k),(k,k,k)]
+
+  steps = 10
+  for i in range(steps):
+    new_gaps = []
+    for (k1, k2, k3) in gaps:
+      k_new = k1 + k2 + k3 + 2 * math.sqrt( k1*k2 + k2*k3 + k1*k3)
+      new_gaps += [(k1,k3,k_new),(k1,k2,k_new),(k2,k3,k_new)]
+      ratio -= 1/k_new**2
+    gaps = new_gaps
+
+  return round(ratio,8)
+
+def pjeuler203():
+  l = []
+  ps = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+  ps = [i**2 for i in ps]
+  v = 51
+  for n in range(v):
+    for k in range(math.ceil(n/2)+1):
+      x = round(scipy.special.binom(n,k))
+      squarefree =  True
+      for p in ps:
+        if x % p == 0:
+          squarefree = False
+      if squarefree:
+        l.append(x)
+  return sum(np.unique(l))
+
+def pjeuler205():
+  score_pete = [0]*37
+  for i1 in range(1,5):
+    for i2 in range(1,5):
+      for i3 in range(1,5):
+        for i4 in range(1,5):
+          for i5 in range(1,5):
+            for i6 in range(1,5):
+              for i7 in range(1,5):
+                for i8 in range(1,5):
+                  for i9 in range(1,5):
+                    score_pete[i1+i2+i3+i4+i5+i6+i7+i8+i9] += 1/(4**9)
+
+  score_colin = [0]*37
+  for i1 in range(1,7):
+    for i2 in range(1,7):
+      for i3 in range(1,7):
+        for i4 in range(1,7):
+          for i5 in range(1,7):
+            for i6 in range(1,7):
+                    score_colin[i1+i2+i3+i4+i5+i6] += 1/(6**6)
+
+  p_pete_beats_colin = 0
+  for res1 in range(1,37):
+    for res2 in range(res1+1,37):
+      p_pete_beats_colin += score_colin[res1]*score_pete[res2]
+  return round(p_pete_beats_colin,7)
+
+def pjeuler206():
+  a = round(1020304050607080900**.5)
+  b = round(1929394959697989990**.5)
+  for x in range(a,b,10):
+    y = x**2
+    success = True
+    for i in range(9):
+      y = y//100
+      if y%10 != 9-i:
+        success = False
+        break
+    if success:
+      return x
 
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
