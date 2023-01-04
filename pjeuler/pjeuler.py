@@ -1,5 +1,6 @@
 import math
 import functools
+from functools import cache
 import itertools
 import collections
 import numpy as np
@@ -62,12 +63,11 @@ def pjeuler7():
 
 def pjeuler8():
   from .tools import digits
-  from functools import reduce
   f = get(8)
   a = digits(f.read())
   f.close()
   m = lambda a,b: a*b
-  return max([reduce(m,a[i:i+13]) for i in range(len(a)-13)])
+  return max([functools.reduce(m,a[i:i+13]) for i in range(len(a)-13)])
 
 def pjeuler9():
   from .tools import gcd
@@ -161,7 +161,7 @@ def pjeuler18():
     for (j,val) in enumerate(str.split(line,sep=" ")):
       a[i,j] = int(val)
   f.close()
-  @functools.lru_cache(None)
+  @cache
   def f(i,j):
     if i==n-1:
       return a[i,j]
@@ -288,7 +288,7 @@ def pjeuler30():
 
 def pjeuler31():
   l = [1,2,5,10,20,50,100,200]
-  @functools.lru_cache(None)
+  @cache
   def split(s,min_size):
     c = 0
     l2 = [i for i in l if min_size<=i]
@@ -341,7 +341,7 @@ def pjeuler33():
 
 def pjeuler34():
   from .tools import digits_int
-  @functools.lru_cache(None)
+  @cache
   def f(n):
     return math.factorial(n)
   s = 0
@@ -854,7 +854,7 @@ def pjeuler67():
     for (j,val) in enumerate(str.split(line,sep=" ")):
       a[i,j] = int(val)
   f.close()
-  @functools.lru_cache(None)
+  @cache
   def f(i,j):
     if i==n-1:
       return a[i,j]
@@ -934,14 +934,14 @@ def pjeuler73():
   return counter
 
 def pjeuler74():
-  import pjeuler, math, functools
+  import pjeuler, math
   fac = [math.factorial(i) for i in range(10)]
 
-  @functools.lru_cache(None)
+  @cache
   def f(x):
     return sum([fac[i] for i in pjeuler.digits_int(x)])
 
-  @functools.lru_cache(None)
+  @cache
   def g(x0):
     x1 = f(x0)
     x2 = f(x1)
@@ -975,7 +975,7 @@ def pjeuler75():
   return sum([1 for (idx,i) in enumerate(l) if i==1])
 
 def pjeuler76():
-  @functools.lru_cache(None)
+  @cache
   def split(number,min_size):
     c = 0
     for i in range(min_size,number-min_size+1):
@@ -993,7 +993,7 @@ def pjeuler77():
   return i
 
 def pjeuler78():
-  @functools.lru_cache(None)
+  @cache
   def p(n):
     if n<0:
       return 0
@@ -1060,7 +1060,7 @@ def pjeuler81():
     for (j,val) in enumerate(str.split(line,sep=",")):
      a[i,j] = int(val)
   f.close()
-  @functools.lru_cache(None)
+  @cache
   def f(i,j):
     if i==0 and j==0:
       v = 0
@@ -1081,7 +1081,7 @@ def pjeuler82():
     for (j,val) in enumerate(str.split(line,sep=",")):
       a[i,j] = int(val)
   f.close()
-  @functools.lru_cache(None)
+  @cache
   def f(i,j,l1,l2):
     if j==0:
       return a[i,0]
@@ -1306,7 +1306,7 @@ def pjeuler88():
               for n in range(i*i, limit+1, i):
                   a[n] = False
 
-  @functools.lru_cache(None)
+  @cache
   def factors(m):
     if m in sps:
       return [int(m)]
@@ -1431,7 +1431,7 @@ def pjeuler91():
   return n//2
 
 def pjeuler92():
-  @functools.lru_cache(None)
+  @cache
   def f(x):
     i = 0
     while x>9:
@@ -1510,7 +1510,7 @@ def pjeuler94():
 def pjeuler95():
   from .tools import primes
 
-  @functools.lru_cache(None)
+  @cache
   def factors(m):
     if m in sps:
       return [int(m)]
@@ -1519,7 +1519,7 @@ def pjeuler95():
           m /= p
           return [p] + factors(m)
 
-  @functools.lru_cache(None)
+  @cache
   def sum_divs(x):
     if x in sps or x==1:
         return 1
@@ -1767,12 +1767,12 @@ def pjeuler108():
   def n_from_lst(lst):
     primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47]
     return np.prod([float(b)**e for (b,e) in zip(primes,lst)])
-    
+
   def sol_from_lst(lst):
     ans = np.prod([2*x+1 for x in lst])
-    return (ans+1)//2  
-  
-  @functools.lru_cache(None)
+    return (ans+1)//2
+
+  @cache
   def partition(number,maxlen):
     answer = [[number]]
     for x in range(1, number):
@@ -1780,7 +1780,7 @@ def pjeuler108():
         if len(y) <= maxlen - 1 and x >= max(y):
           answer.append([x]+y)
     return answer
-  
+
   val = 1000
   n = 1e10
   max_len = 10
@@ -1790,7 +1790,7 @@ def pjeuler108():
       if sol_from_lst(p) > val:
         n = min(n,n_from_lst(p))
   return(int(n))
-  
+
 def pjeuler109():
   fields = []
   for m in range(1,4):
@@ -1828,12 +1828,12 @@ def pjeuler110():
   def n_from_lst(lst):
     primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47]
     return np.prod([float(b)**e for (b,e) in zip(primes,lst)])
-    
+
   def sol_from_lst(lst):
     ans = np.prod([2*x+1 for x in lst])
-    return (ans+1)//2  
-  
-  @functools.lru_cache(None)
+    return (ans+1)//2
+
+  @cache
   def partition(number,maxlen):
     answer = [[number]]
     for x in range(1, number):
@@ -1841,7 +1841,7 @@ def pjeuler110():
         if len(y) <= maxlen - 1 and x >= max(y):
           answer.append([x]+y)
     return answer
-  
+
   val = 4000000
   n = 1e20
   max_len = 15
@@ -1882,8 +1882,40 @@ def pjeuler112():
       break
   return i
 
+def pjeuler113():
+  @cache
+  def increasing_numbers_starting_with(l,i):
+    if i==0:
+      return 0
+    if l==1:
+      return 1
+    n = 0
+    for j in range(i,10):
+      n += increasing_numbers_starting_with(l-1,j)
+    return n
+
+  @cache
+  def decreasing_numbers_starting_with(l,i):
+    if i==0:
+      return 0
+    if l==1:
+      return 1
+    n = 1
+    for j in range(i+1):
+      n += decreasing_numbers_starting_with(l-1,j)
+    return n
+
+  expo = 100
+  n = -9*expo
+  for l in range(1,expo+1):
+    for i in range(10):
+      n += increasing_numbers_starting_with(l,i)
+    for i in range(10):
+      n += decreasing_numbers_starting_with(l,i)
+  return n
+
 def pjeuler114():
-  @functools.lru_cache(None)
+  @cache
   def split(l,red_allowed):
       if l<3:
           return 1
@@ -1896,7 +1928,7 @@ def pjeuler114():
   return split(50,True)
 
 def pjeuler115():
-  @functools.lru_cache(None)
+  @cache
   def split(m,l,red_allowed):
       if l<0:
           return 0
@@ -1917,7 +1949,7 @@ def pjeuler115():
   return n
 
 def pjeuler116():
-  @functools.lru_cache(None)
+  @cache
   def split(l,c):
       if l<c:
           return 1
@@ -1925,7 +1957,7 @@ def pjeuler116():
   return split(50,2)+split(50,3)+split(50,4)-3
 
 def pjeuler117():
-  @functools.lru_cache(None)
+  @cache
   def split(l):
       if l<0:
           return 0
@@ -2054,7 +2086,17 @@ def pjeuler126():
 
   for (i,v) in enumerate(counter):
     if v==1000:
-      return i        
+      return i
+
+def pjeuler145():
+  def sols(n):
+    if n%2==0:
+      return 20*30**(n//2-1)
+    if n%4==1:
+      return 0
+    if n%4==3:
+      return 100*500**(n//4)
+  return sum([sols(n) for n in range(1,10)])
 
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
@@ -2071,7 +2113,7 @@ def pjeuler317():
   return round(V*10000)/10000
 
 def pjeuler345():
-  @functools.lru_cache(None)
+  @cache
   def val(m):
     n = len(m)
     if n == 1:
@@ -2082,7 +2124,7 @@ def pjeuler345():
       v0 = m[i][0] + val(m0)
       v = max(v,v0)
     return v
-  
+
   d = get(345).read().splitlines()
   d = [i.split() for i in d]
   d = tuple(tuple(int(i) for i in j) for j in d)

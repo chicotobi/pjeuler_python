@@ -131,7 +131,7 @@ def write_as_prime_sum(l,n,maxp):
       vals += write_as_prime_sum(l+[p], n-p,p)
   return vals
 
-@functools.lru_cache(None)
+@functools.cache
 def digits_int(x):
   l = []
   while x>9:
@@ -177,7 +177,7 @@ def smart_mod_prod(x,y,mod):
   v = [x]+factors(y)
   return functools.reduce(lambda x,y:x*y%mod,v)
 
-@functools.lru_cache(None)
+@functools.cache
 def sum_divs(x):
   y=collections.Counter(factors(x))
   return int(np.prod([(p**(n+1)-1)/(p-1) for (p,n) in y.items()])-x)
@@ -221,7 +221,7 @@ def is_prime(val):
           return False
   return True
 
-@functools.lru_cache(None)
+@functools.cache
 def is_prime_mr(val):
   return sympy.ntheory.primetest.mr(val,[2,3,5,7])
 
@@ -233,7 +233,7 @@ def continued_fraction(n,get_period=False,m=math.inf):
   c = 1
   init = []
   v = []
-  counter = 0    
+  counter = 0
   while counter<m:
     v.append(a)
     a = math.floor((n**.5+b)*c/(n-b*b))
