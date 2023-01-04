@@ -95,10 +95,12 @@ class TestProblems(unittest.TestCase):
     sols[235] = '41b13508789be1001308e065d4f83ea2'
 
     sols[301] = 'f47b7d975a5ebd3b66af0968ef5e1cdb'
-
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'
+    sols[349] = '412b0faec10b3adb415363d2df26530d'
+    sols[353] = '211b5626459be71baefc78478d18bdc3'
     sols[357] = 'ed25b13b18a21c1077fed00ef42f503b'
+    sols[363] = 'd577f7de8bcdac23329cd166d1bc7a8e'
 
     sols[493] = 'e7a3d17e900134dd57ae44da7e31603c'
 

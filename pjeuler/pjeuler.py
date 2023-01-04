@@ -2467,18 +2467,11 @@ def pjeuler301():
       return i
 
 def pjeuler317():
-  from math import sin, cos, pi, asin, sqrt
-  def max_dist(v,g,h,theta):
-    return v*cos(theta)/g * (v*sin(theta)+sqrt(v**2*sin(theta)**2+2*g*h))
   h = 100
   v = 20
   g = 9.81
-  k = 2*g*h/v**2
-  theta = asin(1/sqrt(k+2))
-  dist = max_dist(v,g,h,theta)
-  height = h + v**2/2/g
-  V = pi/2 * dist**2 * height
-  return round(V*10000)/10000
+  V = math.pi * v**2/4/g**3 * (v**2+2*g*h)**2
+  return round(V,4)
 
 def pjeuler345():
   @cache
@@ -2497,6 +2490,176 @@ def pjeuler345():
   d = [i.split() for i in d]
   d = tuple(tuple(int(i) for i in j) for j in d)
   return val(d)
+
+def pjeuler349():
+  n = 2000
+
+  a = np.zeros((n,n))
+
+  x = n//2
+  y = n//2
+
+  steps = 50000
+  step = 0
+  rot = 0
+  arr = [0]*steps
+  n = 0
+  for step in range(steps):
+      if a[x,y] == 0:
+          n += 1
+          a[x,y] = 1
+          rot = (rot - 1) % 4
+      else:
+          n -= 1
+          a[x,y] = 0
+          rot = (rot + 1) % 4
+      if rot == 0:
+          x -= 1
+      elif rot == 1:
+          y -= 1
+      elif rot == 2:
+          x += 1
+      else:
+          y += 1
+      arr[step] = n
+
+  # Get period length from Fourier analysis
+  periodic_part = arr[11000:]
+  indices = [i for (i,x) in enumerate(scipy.fft.fft(periodic_part)) if np.real(x)>0 and i>0]
+  period = len(periodic_part) // min(indices)
+  incr = arr[11000+period] - arr[11000]
+
+  steps = 10**18
+  offset = steps%period
+  step_until_period = offset + 120 * period
+  step_until_end = steps - step_until_period
+  periods_until_end = step_until_end // period
+
+  return arr[step_until_period-1] + incr * periods_until_end
+
+def pjeuler353():
+  #from mayavi import mlab
+  import scipy.sparse
+  import scipy.sparse.csgraph
+  def risk(p1,p2):
+    x1,y1,z1 = p1
+    x2,y2,z2 = p2
+    alpha = math.acos((x1*x2+y1*y2+z1*z2)/r**2)
+    return alpha**2
+
+  def dist(p1,p2):
+    x1,y1,z1 = p1
+    x2,y2,z2 = p2
+    return abs(x1-x2)+abs(y1-y2)+abs(z1-z2)
+
+  def plot():
+    idx = min_idx
+    sol_pts = []
+    while True:
+      idx = sol[0,idx]
+      if idx == -9999:
+        break
+      pt = pts[idx]
+      sol_pts = [pt] + sol_pts
+
+    x = sol_pts[-1][0]
+    y = sol_pts[-1][1]
+    if x * y !=0:
+      l = r / (x**2+y**2)**.5
+      x *= l
+      y *= l
+      p2 = (x,y,0)
+    else:
+      p2 = (r,0,0)
+    sol_pts += [p2]
+
+    # Create a sphere
+    pi = np.pi
+    cos = np.cos
+    sin = np.sin
+    phi, theta = np.mgrid[0:pi/2:21j, pi/4:pi/2:21j]
+
+    x = r * sin(phi) * cos(theta)
+    y = r * sin(phi) * sin(theta)
+    z = r * cos(phi)
+
+    xx,yy,zz = zip(*pts)
+    xsol,ysol,zsol = zip(*sol_pts)
+
+
+    mlab.figure(1, bgcolor=(1,1,1), fgcolor=(0, 0, 0), size=(800, 800))
+    mlab.clf()
+    mlab.mesh(x, y, z,color=(0,1,1),opacity=0.5)
+    mlab.points3d(xx,yy,zz,color=(1,0,0),scale_factor=0.01*r)
+    mlab.plot3d(xsol,ysol,zsol,line_width=20*r,tube_radius=r/500)
+    mlab.view(66, 52, 3*r,focalpoint="auto")
+    mlab.show()
+
+  s = 0
+  rs = [2**n-1 for n in range(1,16)]
+  for r in rs:
+
+    pts = []
+    for x in range(r):
+      hlp = r**2-x**2
+      for y in range(x,r+1):
+        z2 = hlp-y**2
+        if z2<0:
+          break
+        z = round(math.sqrt(z2))
+        if z**2 == z2:
+          pts.append((x,y,z))
+          if z<=x:
+            pts.append((z,x,y))
+          if z<=y:
+            pts.append((z,y,x))
+
+    pts = list(set(pts))
+    n = len(pts)+1
+
+    start_idx = pts.index((0,0, r))
+    goal_pts = [pt for pt in pts if pt[2]==0]
+    goal_idxs = [n-1]
+    for pt in goal_pts:
+      goal_idxs.append(pts.index(pt))
+
+    max_dist = 10000
+    ii = []
+    jj = []
+    vv = []
+    for i,p1 in enumerate(pts):
+      for j,p2 in enumerate(pts):
+        if i<j:
+          if dist(p1,p2) < max_dist:
+            rsk = risk(p1,p2)
+            ii.append(i)
+            jj.append(j)
+            vv.append(rsk)
+            ii.append(j)
+            jj.append(i)
+            vv.append(rsk)
+      if i not in goal_idxs:
+        p2 = (p1[0], p1[1], -p1[2])
+        if dist(p1,p2) < max_dist:
+          rsk = risk(p1,p2)
+          ii.append(i)
+          jj.append(n-1)
+          vv.append(rsk/2)
+          ii.append(n-1)
+          jj.append(i)
+          vv.append(rsk/2)
+    mat = scipy.sparse.csr_matrix((vv,(ii,jj)),shape=(n,n))
+
+    result, sol = scipy.sparse.csgraph.shortest_path(mat,indices=[start_idx],return_predecessors=True)
+
+    min_dst = 1
+    for idx in goal_idxs:
+      dst = result[0,idx]/math.pi**2 * 2
+      if dst < min_dst:
+        min_dst = dst
+        min_idx = idx
+    s += min_dst
+  return round(s,10)
 
 def pjeuler357():
   from .tools import primes
@@ -2548,6 +2711,72 @@ def pjeuler357():
     if b:
       s += n
   return s
+
+def pjeuler363():
+  import math
+  from mpmath import mp
+  mp.dps = 50
+
+  def my_bezier(t,v):
+    x0 = 1
+    y0 = 0
+    x1 = 1
+    y1 = v
+    x2 = v
+    y2 = 1
+    x3 = 0
+    y3 = 1
+
+    x0 = x0*t+x1*(1-t)
+    y0 = y0*t+y1*(1-t)
+    x1 = x1*t+x2*(1-t)
+    y1 = y1*t+y2*(1-t)
+    x2 = x2*t+x3*(1-t)
+    y2 = y2*t+y3*(1-t)
+
+    x0 = x0*t+x1*(1-t)
+    y0 = y0*t+y1*(1-t)
+    x1 = x1*t+x2*(1-t)
+    y1 = y1*t+y2*(1-t)
+
+    x0 = x0*t+x1*(1-t)
+    y0 = y0*t+y1*(1-t)
+    return x0,y0
+
+  def eval(N,v):
+    l = 0
+    a = -mp.pi/4
+    xold, yold = my_bezier(0,v)
+    for i in range(1,N+1):
+      x,y = my_bezier(i/N,v)
+      if i>0:
+        l += ((x-xold)**2+(y-yold)**2)**.5
+        a += (y+yold)*(x-xold)/2
+      xold = x
+      yold = y
+    return l,a
+
+  N = 100000
+  v1 = 0.5517
+  v2 = 0.5518
+  l1,a1 = eval(N,v1)
+  l2,a2 = eval(N,v2)
+
+  eold = 1
+  while True:
+    N = round(N*1.1)
+    v = (v1+v2)/2
+    l,a = eval(N,v)
+    err = 100*(l-math.pi/2)/(math.pi/2)
+    err = round(err,10)
+    if a>0:
+      v2 = v
+    else:
+      v1 = v
+    if abs(eold-err)<1e-11:
+      break
+    eold = err
+  return round(err,10)
 
 def pjeuler493():
   from scipy.special import comb
