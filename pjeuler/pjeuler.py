@@ -2782,6 +2782,35 @@ def pjeuler493():
   from scipy.special import comb
   return round(7*(1-comb(60,20)/comb(70,20)),9)
 
+def pjeuler504():
+  m = 100
+
+  dct = {}
+  for a in range(1,m+1):
+    for b in range(1,m+1):
+      v = .25
+      if a>1:
+        v += (a-1) * .5
+      if b>1:
+        v += (b-1) * .5
+      if a>1 and b>1:
+        v += .5 * ( (a-1)*(b-1) - sympy.gcd(a,b) + 1)
+      dct[(a,b)] = round(v*4)
+      dct[(b,a)] = round(v*4)
+
+  q = set(i**2 for i in range(0,400,2))
+  s = 0
+  for a in range(1,m+1):
+    for b in range(1,m+1):
+      v0 = dct[(a,b)]
+      for c in range(1,m+1):
+        v1 = v0 + dct[(b,c)]
+        for d in range(1,m+1):
+          v = v1 + dct[(c,d)] +dct[(d,a)]
+          if v in q:
+            s += 1
+  return s
+
 def pjeuler577():
   tri = [(i+1)*(i+2)//2 for i in range(12345)]
   def H(n):
