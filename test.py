@@ -91,6 +91,10 @@ class TestProblems(unittest.TestCase):
     sols[203] = 'd7ec16d216c923d3c927f46cfc914e92'
     sols[205] = 'ba6c6c3888227a0799eca38191b587be'
     sols[206] = '09f9d87cb4b1ebb34e1f607e55a351d8'
+    #sols[216] = 'e512153424a482deb9de401ac0465a72'
+    sols[235] = '41b13508789be1001308e065d4f83ea2'
+
+    sols[301] = 'f47b7d975a5ebd3b66af0968ef5e1cdb'
 
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'

@@ -2390,6 +2390,82 @@ def pjeuler206():
     if success:
       return x
 
+def pjeuler216():
+  s = 0
+  for n in range(int(5e7)):
+    if n%100000==0:
+      print(n)
+    if sympy.isprime(2*n**2-1):
+      s += 1
+  return s
+
+def pjeuler235():
+  def u(k,r):
+    return (900-3*k)*r**(k-1)
+  def s(r):
+    return sum([u(k,r) for k in range(1,5001)]) + 600000000000
+  r1 = 1
+  r2 = 1.1
+
+  while r2-r1>1e-12:
+    r = (r1+r2)/2
+    if s(r)>0:
+      r1 = r
+    else:
+      r2 = r
+  return round(r,12)
+
+def pjeuler301():
+  @cache
+  def nim(a,b,c):
+    if a==0 and b==0 and c!=0:
+      return 1
+    if a==0 and b!=0 and c==0:
+      return 1
+    if a!=0 and b==0 and c==0:
+      return 1
+    if a==0 and b==c:
+      return 0
+    if b==0 and a==c:
+      return 0
+    if c==0 and a==b:
+      return 0
+    for a2 in range(a):
+      if not nim(a2,b,c):
+        return 1
+    for b2 in range(b):
+      if not nim(a,b2,c):
+        return 1
+    for c2 in range(c):
+      if not nim(a,b,c2):
+        return 1
+    return 0
+
+  n = []
+  for i in range(1,51):
+    a = i
+    b = 2*i
+    c = 3*i
+    if not nim(a,b,c):
+      n += [i]
+
+  def A003714(n):
+    tlist, s = [1, 2], 0
+    while tlist[-1]+tlist[-2] <= n:
+        tlist.append(tlist[-1]+tlist[-2])
+    for d in tlist[::-1]:
+        s *= 2
+        if d <= n:
+            s += 1
+            n -= d
+    return s
+
+  i = 1
+  while True:
+    i+=1
+    if A003714(i) >= 2**30:
+      return i
+
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
   def max_dist(v,g,h,theta):
