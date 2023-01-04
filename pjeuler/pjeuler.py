@@ -2098,6 +2098,131 @@ def pjeuler145():
       return 100*500**(n//4)
   return sum([sols(n) for n in range(1,10)])
 
+def pjeuler169():
+  @cache
+  def f(x):
+    if x<=1:
+      return x
+    if x%2==0:
+      return f(x//2)
+    else:
+      return f(x//2)+f(x//2+1)
+  return f(int(1e12)*int(1e13)+1)
+
+def pjeuler172():
+  @cache
+  def calc(n0,n1,n2,n3,n4,n5,n6,n7,n8,n9):
+      if n0+n1+n2+n3+n4+n5+n6+n7+n8+n9==1:
+          if n0==0:
+              return 1
+          else:
+              return 0
+      s = 0
+      if n0>0:
+          s += calc(n0-1,n1,n2,n3,n4,n5,n6,n7,n8,n9)
+      if n1>0:
+          s += calc(n0,n1-1,n2,n3,n4,n5,n6,n7,n8,n9)
+      if n2>0:
+          s += calc(n0,n1,n2-1,n3,n4,n5,n6,n7,n8,n9)
+      if n3>0:
+          s += calc(n0,n1,n2,n3-1,n4,n5,n6,n7,n8,n9)
+      if n4>0:
+          s += calc(n0,n1,n2,n3,n4-1,n5,n6,n7,n8,n9)
+      if n5>0:
+          s += calc(n0,n1,n2,n3,n4,n5-1,n6,n7,n8,n9)
+      if n6>0:
+          s += calc(n0,n1,n2,n3,n4,n5,n6-1,n7,n8,n9)
+      if n7>0:
+          s += calc(n0,n1,n2,n3,n4,n5,n6,n7-1,n8,n9)
+      if n8>0:
+          s += calc(n0,n1,n2,n3,n4,n5,n6,n7,n8-1,n9)
+      if n9>0:
+          s += calc(n0,n1,n2,n3,n4,n5,n6,n7,n8,n9-1)
+      return s
+
+  def split(n,k,arr):
+      if n<0:
+          return
+      if k == 1:
+          if n <= 3:
+              sols.append(arr+[n])
+          return
+      split(n  ,k-1,arr+[0])
+      split(n-1,k-1,arr+[1])
+      split(n-2,k-1,arr+[2])
+      split(n-3,k-1,arr+[3])
+
+  sols = []
+  split(18,10,[])
+  n = 0
+  for sol in sols:
+      n += calc(sol[0],sol[1],sol[2],sol[3],sol[4],sol[5],sol[6],sol[7],sol[8],sol[9])
+  return n
+
+def pjeuler173():
+  @cache
+  def tiles_ring(l):
+    if l==1:
+      return 1
+    else:
+      return 4*l-4
+
+  @cache
+  def n_pattern(maxw,ntiles):
+    if maxw < 3:
+      return 0
+    tmp = tiles_ring(maxw)
+    if ntiles >= tmp:
+      return 1 + n_pattern(maxw-2,ntiles-tmp)
+    else:
+      return 0
+
+  ntiles = 1000000
+  n = 0
+  for i in range(1,ntiles//4+3):
+    n += n_pattern(i,ntiles)
+  return n
+
+def pjeuler177():
+  @functools.lru_cache(None)
+  def si(x):
+      return math.sin(x/180*math.pi)
+
+  @functools.lru_cache(None)
+  def co(x):
+      return math.cos(x/180*math.pi)
+
+  s = []
+  for a in range(1,179):
+      print(a)
+      for c in range(1,179):
+          b = 180 - a - c
+          if b>1:
+              for d in range(1,180-a):
+                  for e in range(1,180-c):
+                      f = 180 - d - e
+                      if f>1:
+                          nom = si(a+d)
+                          den = si(e)*si(b)/si(f)/si(c)-co(a+d)
+                          x = math.atan2(nom,den)*180/math.pi
+                          if abs(round(x)-x)<1e-5:
+                              x = int(x)
+                              y = 180 - a - d - x
+                              if x > 0 and f-x > 0 and y > 0 and b-y > 0:
+                                  check_val  = si(f)*si(c)*si(y)-si(b)*si(e)*si(x)
+                                  if abs(check_val) < 1e-9:
+                                    s += [(d,a,y,b-y,c,e,f-x,x)]
+
+  t = set()
+  for (a,b,c,d,e,f,g,h) in s:
+      if (a,b,c,d,e,f,g,h) in t or (c,d,e,f,g,h,a,b) in t or (e,f,g,h,a,b,c,d) in t or (g,h,a,b,c,d,e,f) in t:
+          continue
+      if (h,g,f,e,d,c,b,a) in t or (f,e,d,c,b,a,h,g) in t or (d,c,b,a,h,g,f,e) in t or (b,a,h,g,f,e,d,c) in t:
+          continue
+      t.add((a,b,c,d,e,f,g,h))
+  return len(t)
+
+
 def pjeuler317():
   from math import sin, cos, pi, asin, sqrt
   def max_dist(v,g,h,theta):

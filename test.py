@@ -78,10 +78,17 @@ class TestProblems(unittest.TestCase):
     sols[125] = '1b5635e8ab723e01570ca783129493dd'
     sols[126] = '387d6ae83cbc6fa0b9192b56bf095c49'
     sols[145] = '705e8444ad9c92e9a7589fb97515a9b6'
+    sols[169] = 'd149d4836703a8908becea56ddd3ed42'
+    sols[172] = 'f5f260ee21ead7478403c2ccd18a1829'
+    sols[173] = '177f825c89a68aefae37b8dec9bb8a9b'
+    #sols[177] = 'd7a85236af930db0f7e84f2de8ee7ac2'
+
     sols[317] = 'b0e2bec93bfe598ade5d3d1141f76bdd'
     sols[345] = 'cf3b784c8593890043b17e24088125d4'
     sols[357] = 'ed25b13b18a21c1077fed00ef42f503b'
+
     sols[493] = 'e7a3d17e900134dd57ae44da7e31603c'
+
     sols[808] = 'b3026f0182a9ff9bbe9193fa55c87d03'
 
     print()
