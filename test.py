@@ -104,6 +104,9 @@ class TestProblems(unittest.TestCase):
 
     sols[493] = 'e7a3d17e900134dd57ae44da7e31603c'
 
+    sols[577] = '87bfbce7d99fc058b8919b15cbced9ed'
+    sols[587] = 'd4dd111a4fd973394238aca5c05bebe3'
+
     sols[808] = 'b3026f0182a9ff9bbe9193fa55c87d03'
 
     print()

@@ -2782,6 +2782,53 @@ def pjeuler493():
   from scipy.special import comb
   return round(7*(1-comb(60,20)/comb(70,20)),9)
 
+def pjeuler577():
+  tri = [(i+1)*(i+2)//2 for i in range(12345)]
+  def H(n):
+    x = 0
+    m = 1
+    n -= 3
+    while n>=0:
+      x += tri[n] * m
+      m += 1
+      n -= 3
+    return x
+  return sum(H(i) for i in range(3,12346))
+
+def pjeuler587():
+  def get_x(n):
+    nom = - math.sqrt(2) * n**(3/2) + n**2 + n
+    den = n**2+1
+    return nom/den
+
+  def indefinite_integral(x):
+    return 0.5 * (math.sqrt(x*(2-x)) - x * (math.sqrt(x*(2-x))-2) + 2*math.asin(math.sqrt(1 - x/2)))
+
+  def area2(x):
+    return indefinite_integral(1) - indefinite_integral(x)
+
+  def area1(x,n):
+    return 0.5 * x * x/n
+
+  def area(n):
+    x = get_x(n)
+    return area1(x,n) + area2(x)
+
+  def ratio(n):
+    return area(n) / (1-math.pi/4) - 0.001
+
+  n1 = 1
+  n2 = 10000
+  while True:
+    n = round((n1+n2)/2)
+    a = ratio(n)
+    if a > 0:
+      n1 = n
+    else:
+      n2 = n
+    if n1+1==n2:
+      return n2
+
 def pjeuler808():
   from .tools import primes
   s = 0
