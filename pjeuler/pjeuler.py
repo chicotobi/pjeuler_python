@@ -2489,6 +2489,20 @@ def pjeuler203():
         l.append(x)
   return sum(np.unique(l))
 
+def pjeuler204():
+  p = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
+  def ham(n,pidx):
+    hams = []
+    while n <= 1e9:
+      if pidx < len(p)-1:
+        tmp = ham(n,pidx+1)
+        hams += tmp
+      else:
+        hams += [n]
+      n *= p[pidx]
+    return hams
+  return len(ham(1,0))
+
 def pjeuler205():
   score_pete = [0]*37
   for i1 in range(1,5):
