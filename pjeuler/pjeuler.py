@@ -3013,6 +3013,65 @@ def pjeuler587():
     if n1+1==n2:
       return n2
 
+def pjeuler607():
+  from scipy.optimize import root
+  import math
+
+  v2 = (25 - 25 * 2**.5)**2
+  w = 50
+
+  def res(x):
+    x1 = x[0]
+    x2 = x[1]
+    x3 = x[2]
+    x4 = x[3]
+    x5 = x[4]
+    x6 = x[5]
+
+    sina = x1 / math.sqrt(x1**2+v2)
+    sinb = x2 / math.sqrt(x2**2+100)
+    sinc = x3 / math.sqrt(x3**2+100)
+    sind = x4 / math.sqrt(x4**2+100)
+    sine = x5 / math.sqrt(x5**2+100)
+    sinf = x6 / math.sqrt(x6**2+100)
+
+    w = 50 * 2**.5 -x1-x2-x3-x4-x5-x6
+
+    sing = w / math.sqrt(w**2+v2)
+
+    y1 = sina/sinb - 10/9
+    y2 = sinb/sinc - 9/8
+    y3 = sinc/sind - 8/7
+    y4 = sind/sine - 7/6
+    y5 = sine/sinf - 6/5
+    y6 = sinf/sing - 5/10
+
+    return [y1,y2,y3,y4,y5,y6]
+
+  x0 = [0.1]*6
+
+  res(x0)
+
+  r = root(res,x0).x
+
+  x1 = r[0]
+  x2 = r[1]
+  x3 = r[2]
+  x4 = r[3]
+  x5 = r[4]
+  x6 = r[5]
+
+  s0 = math.sqrt(x1**2+v2)
+  s1 = math.sqrt(x2**2+100)
+  s2 = math.sqrt(x3**2+100)
+  s3 = math.sqrt(x4**2+100)
+  s4 = math.sqrt(x5**2+100)
+  s5 = math.sqrt(x6**2+100)
+  w = 50 * 2**.5 -x1-x2-x3-x4-x5-x6
+  s6 = math.sqrt(w**2+v2)
+
+  return round(s0/10+s1/9+s2/8+s3/7+s4/6+s5/5+s6/10,10)
+
 def pjeuler808():
   from .tools import primes
   s = 0
