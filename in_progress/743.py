@@ -49,5 +49,7 @@ def a(k,n):
 #   for k in range(1,n+1):
 #     print("k=",k,"n=",n,"a(k,n)=",a(k,n))    
     
-for i in range(1,11):
-  print("k=",i,"n=",i**2,"a(k,n)=",a(i,i**2))    
+for i in range(2,11):
+  k = 2
+  n = i
+  print("k=",k,"n=",n,"a(k,n)=",a(k,n))    
